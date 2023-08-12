@@ -1,9 +1,16 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import Image from "next/image"
+import styles from "./page.module.css"
+import { LoginButton, LogoutButton } from "@/components/Button"
+import { getServerSession } from "next-auth"
+import { authOptions } from "./api/auth/[...nextauth]/route"
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions)
+
   return (
     <main className={styles.main}>
+      <LoginButton />
+      <LogoutButton />
       <div className={styles.description}>
         <p>
           Get started by editing&nbsp;
@@ -15,7 +22,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
+            By{" "}
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
