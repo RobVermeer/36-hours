@@ -1,102 +1,56 @@
-import Image from "next/image"
-import styles from "./page.module.css"
-import { LoginButton, LogoutButton } from "@/components/Button"
+import { Form } from "@/components/Form"
+import { getTodoItems } from "@/actions/todo"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./api/auth/[...nextauth]/route"
+import { Button } from "@/components/ui/button"
+import { LoginWithGithub } from "@/components/LoginWithGithub"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Menu } from "lucide-react"
+import { Logout } from "@/components/Logout"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
 
-  return (
-    <main className={styles.main}>
-      <LoginButton />
-      <LogoutButton />
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+  if (!session) {
+    return (
+      <main className="grid gap-16">
+        <header
+          className="h-64 bg-cover bg-center drop-shadow-lg"
+          style={{ backgroundImage: "url('/header.webp')" }}
         />
-      </div>
+        <section className="p-4 text-center">
+          <LoginWithGithub />
+        </section>
+      </main>
+    )
+  }
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+  const data = await getTodoItems()
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+  return (
+    <main className="grid h-screen max-h-screen overflow-hidden">
+      <header
+        className="flex justify-end h-32 bg-cover bg-center drop-shadow-lg"
+        style={{ backgroundImage: "url('/header.webp')" }}
+      >
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="m-2" variant="ghost" size="icon">
+              <Menu color="white" size="24" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56 mr-2">
+            <Logout />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </header>
+      <section className="grid inset-0 mt-32 items-end overflow-auto fixed">
+        <Form data={data} />
+      </section>
     </main>
   )
 }
