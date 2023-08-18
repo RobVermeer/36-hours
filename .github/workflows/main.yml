@@ -40,7 +40,7 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Deploy with rsync 💨
         run: rsync -avz --delete .next/standalone/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/36.robvermeer.nl/ --exclude=.env.local --exclude=database/
-      - name: Migrate database 🪤
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /var/www/36.robvermeer.nl/ && dotenv -e .env.local prisma migrate deploy"
+      # - name: Migrate database 🪤
+      #   run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /var/www/36.robvermeer.nl/ && dotenv -e .env.local prisma migrate deploy"
       - name: Restart server 🏁
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /var/www/36.robvermeer.nl/ && pm2 reload 36"
