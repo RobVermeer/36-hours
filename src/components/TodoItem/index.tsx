@@ -64,7 +64,7 @@ export function TodoItem({
       <ContextMenuTrigger>
         <label
           className={cn(
-            "flex gap-2 items-center rounded-md p-2 border border-slate-200",
+            "select-none flex gap-2 items-center rounded-md p-2 border border-slate-200",
             className
           )}
         >
