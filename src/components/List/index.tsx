@@ -18,20 +18,22 @@ export const List = ({
   resetTimer,
 }: Props) => {
   return (
-    <div className="grid gap-2 mb-4">
-      {data.map(({ id, text, completedAt, createdAt }) => (
-        <TodoItem
-          key={id}
-          id={id}
-          text={text}
-          completedAt={completedAt}
-          createdAt={createdAt}
-          onComplete={onComplete}
-          undoComplete={undoComplete}
-          onDelete={onDelete}
-          resetTimer={resetTimer}
-        />
-      ))}
+    <div className="flex flex-col-reverse fixed p-4 top-64 bottom-14 left-0 right-0 overflow-auto">
+      <div className="flex flex-col justify-end gap-2">
+        {data.map(({ id, text, completedAt, createdAt }) => (
+          <TodoItem
+            key={id}
+            id={id}
+            text={text}
+            completedAt={completedAt}
+            createdAt={createdAt}
+            onComplete={onComplete}
+            undoComplete={undoComplete}
+            onDelete={onDelete}
+            resetTimer={resetTimer}
+          />
+        ))}
+      </div>
     </div>
   )
 }

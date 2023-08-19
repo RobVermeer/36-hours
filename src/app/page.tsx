@@ -31,9 +31,9 @@ export default async function Home() {
   const data = await getTodoItems()
 
   return (
-    <main className="grid h-screen max-h-screen overflow-hidden">
+    <main>
       <header
-        className="flex justify-end h-64 bg-cover bg-center drop-shadow-xl"
+        className="flex justify-end h-64 bg-cover bg-center fixed top-0 left-0 right-0"
         style={{ backgroundImage: "url('/background.jpg')" }}
       >
         <DropdownMenu>
@@ -56,9 +56,7 @@ export default async function Home() {
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
-      <section className="grid inset-0 mt-32 items-end overflow-auto fixed">
-        <Form data={data} />
-      </section>
+      <Form data={data} />
     </main>
   )
 }

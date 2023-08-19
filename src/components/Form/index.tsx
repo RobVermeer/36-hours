@@ -122,7 +122,7 @@ export const Form = ({ data }: Props) => {
   }
 
   return (
-    <form ref={formRef} action={handleSubmit} className="p-4 overflow-hidden">
+    <form ref={formRef} action={handleSubmit}>
       <List
         data={optimisticData}
         onComplete={handleComplete}
@@ -131,7 +131,7 @@ export const Form = ({ data }: Props) => {
         resetTimer={handleResetTimer}
       />
 
-      <div className="flex gap-2">
+      <div className="bg-white dark:bg-slate-900 flex gap-2 fixed p-4 bottom-0 left-0 right-0">
         <Input name="text" required />
         <AddTodo />
       </div>
