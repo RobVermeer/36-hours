@@ -4,6 +4,7 @@ import {
   addTodo,
   completeTodo,
   deleteTodo,
+  resetTimer,
   undoCompleteTodo,
 } from "@/actions/todo"
 import {
@@ -47,6 +48,14 @@ function reducer(state: Todo[], action: Action): Todo[] {
       })
     case "delete_todo":
       return state.filter(({ id }) => id !== action.payload.id)
+    case "reset_timer":
+      return state.map((item) => {
+        if (item.id === action.payload.id) {
+          item.createdAt = new Date()
+        }
+
+        return item
+      })
   }
 
   throw Error("Unknown action.")
@@ -98,6 +107,16 @@ export const Form = ({ data }: Props) => {
     } catch {}
   }
 
+  async function handleResetTimer(id: string) {
+    try {
+      addOptimisticData({
+        type: "reset_timer",
+        payload: { id },
+      })
+      await resetTimer(id)
+    } catch {}
+  }
+
   return (
     <form ref={formRef} action={handleSubmit} className="p-4 overflow-hidden">
       <List
@@ -105,6 +124,7 @@ export const Form = ({ data }: Props) => {
         onComplete={handleComplete}
         undoComplete={handleUndoComplete}
         onDelete={handleDelete}
+        resetTimer={handleResetTimer}
       />
 
       <div className="flex gap-2">

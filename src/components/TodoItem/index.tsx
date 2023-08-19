@@ -1,8 +1,13 @@
 import { cn } from "@/lib/utils"
-import { PanInfo, motion, useAnimate } from "framer-motion"
 import { MouseEventHandler } from "react"
 import { Checkbox } from "../ui/checkbox"
-import { Trash2, Undo2 } from "lucide-react"
+import { History, Trash2, Undo2 } from "lucide-react"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "../ui/context-menu"
 
 interface Props {
   id: string
@@ -11,6 +16,7 @@ interface Props {
   onComplete: MouseEventHandler<HTMLButtonElement>
   onDelete: (id: string) => void
   undoComplete: (id: string) => void
+  resetTimer: (id: string) => void
 }
 
 export function TodoItem({
@@ -20,45 +26,14 @@ export function TodoItem({
   onComplete,
   undoComplete,
   onDelete,
+  resetTimer,
 }: Props) {
   const completed = Boolean(completedAt)
   const className = completed ? "bg-green-50" : "bg-orange-50"
 
-  const [scope, animate] = useAnimate()
-
-  async function handleDragEnd(
-    event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) {
-    const offset = info.offset.x
-    const velocity = info.velocity.x
-
-    if (offset > 0 && (offset < 50 || velocity < 500)) {
-      undoComplete(id)
-      await animate(scope.current, { x: 0, opacity: 1 }, { duration: 0.5 })
-    } else if (offset < -50 || velocity < -500) {
-      await animate(
-        scope.current,
-        { x: "-100%", opacity: 0 },
-        { duration: 0.2 }
-      )
-      await animate(scope.current, { height: 0 }, { duration: 0.2 })
-      onDelete(id)
-    } else {
-      await animate(scope.current, { x: 0, opacity: 1 }, { duration: 0.5 })
-    }
-  }
-
   return (
-    <div className="grid grid-cols-2 items-center">
-      <motion.div
-        drag="x"
-        dragElastic={0.2}
-        dragSnapToOrigin
-        onDragEnd={handleDragEnd}
-        ref={scope}
-        className="order-1 row-start-1 col-start-1 col-end-3"
-      >
+    <ContextMenu>
+      <ContextMenuTrigger>
         <label
           className={cn(
             "flex justify-between items-center rounded-md p-2 shadow-sm",
@@ -66,18 +41,35 @@ export function TodoItem({
           )}
         >
           {text}
-
           <Checkbox value={id} checked={completed} onClick={onComplete} />
         </label>
-      </motion.div>
-      <Trash2
-        size="24"
-        className="text-red-600 justify-self-end row-start-1 col-start-2 col-end-3"
-      />
-      <Undo2
-        size="24"
-        className="text-green-600 justify-self-start row-start-1 col-start-1 col-end-2"
-      />
-    </div>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem
+          onClick={() => onDelete(id)}
+          className="flex gap-2 text-red-600"
+        >
+          <Trash2 size="16" className="text-red-600" /> Remove todo
+        </ContextMenuItem>
+        {completed && (
+          <ContextMenuItem
+            onClick={() => undoComplete(id)}
+            className="flex gap-2"
+          >
+            <Undo2 size="16" className="text-yellow-600" />
+            Undo completed
+          </ContextMenuItem>
+        )}
+        {!completed && (
+          <ContextMenuItem
+            onClick={() => resetTimer(id)}
+            className="flex gap-2"
+          >
+            <History size="16" className="text-green-600" />
+            Reset timer
+          </ContextMenuItem>
+        )}
+      </ContextMenuContent>
+    </ContextMenu>
   )
 }

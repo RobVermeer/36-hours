@@ -65,6 +65,25 @@ export async function undoCompleteTodo(id: string) {
   revalidatePath("/")
 }
 
+export async function resetTimer(id: string) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    throw new Error("Not logged in")
+  }
+
+  await prisma.todo.update({
+    data: {
+      createdAt: new Date(),
+    },
+    where: {
+      id,
+    },
+  })
+
+  revalidatePath("/")
+}
+
 export async function deleteTodo(id: string) {
   const session = await getServerSession(authOptions)
 
