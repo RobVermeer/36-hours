@@ -48,7 +48,12 @@ export function TodoItem({
 
   const icon = useMemo(() => {
     if (completed) {
-      return <CheckCircle2 size="20" className="text-slate-600 ml-auto" />
+      return (
+        <CheckCircle2
+          size="20"
+          className="text-slate-600 dark:text-slate-400 ml-auto"
+        />
+      )
     }
     if (hours > 24) {
       return (
@@ -87,6 +92,7 @@ export function TodoItem({
             value={id}
             checked={completed}
             onClick={onComplete}
+            disabled={completed}
           />
           {text}
           {icon}
