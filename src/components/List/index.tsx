@@ -19,12 +19,13 @@ export const List = ({
 }: Props) => {
   return (
     <div className="grid gap-2 mb-4">
-      {data.map(({ id, text, completedAt }) => (
+      {data.map(({ id, text, completedAt, createdAt }) => (
         <TodoItem
           key={id}
           id={id}
           text={text}
           completedAt={completedAt}
+          createdAt={createdAt}
           onComplete={onComplete}
           undoComplete={undoComplete}
           onDelete={onDelete}

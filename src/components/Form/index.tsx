@@ -68,7 +68,11 @@ export const Form = ({ data }: Props) => {
     try {
       addOptimisticData({
         type: "add_todo",
-        payload: { id: crypto.randomUUID(), text: data.get("text") },
+        payload: {
+          id: crypto.randomUUID(),
+          text: data.get("text"),
+          createdAt: new Date(),
+        },
       })
       await addTodo(data)
       formRef.current?.reset()

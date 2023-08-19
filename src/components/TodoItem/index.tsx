@@ -1,7 +1,15 @@
 import { cn } from "@/lib/utils"
-import { MouseEventHandler } from "react"
+import { MouseEventHandler, useMemo } from "react"
 import { Checkbox } from "../ui/checkbox"
-import { History, Trash2, Undo2 } from "lucide-react"
+import {
+  CheckCircle2,
+  Clock11,
+  Clock2,
+  Clock5,
+  History,
+  Trash2,
+  Undo2,
+} from "lucide-react"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -13,6 +21,7 @@ interface Props {
   id: string
   text: string
   completedAt: Date | null
+  createdAt: Date
   onComplete: MouseEventHandler<HTMLButtonElement>
   onDelete: (id: string) => void
   undoComplete: (id: string) => void
@@ -23,25 +32,45 @@ export function TodoItem({
   id,
   text,
   completedAt,
+  createdAt,
   onComplete,
   undoComplete,
   onDelete,
   resetTimer,
 }: Props) {
   const completed = Boolean(completedAt)
-  const className = completed ? "bg-green-50" : "bg-orange-50"
+  var hours = Math.round(
+    Math.abs(new Date().getTime() - createdAt.getTime()) / 36e5
+  )
+  const className = completed ? "opacity-40 bg-slate-200" : ""
+
+  const icon = useMemo(() => {
+    if (completed) {
+      return <CheckCircle2 size="20" className="text-slate-600 ml-auto" />
+    }
+    if (hours > 24) {
+      return <Clock11 size="20" className="text-red-600 ml-auto" />
+    }
+
+    if (hours > 12) {
+      return <Clock5 size="20" className="text-yellow-600 ml-auto" />
+    }
+
+    return <Clock2 size="20" className="text-green-600 ml-auto" />
+  }, [completed, hours])
 
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         <label
           className={cn(
-            "flex justify-between items-center rounded-md p-2 shadow-sm",
+            "flex gap-2 items-center rounded-md p-2 border border-slate-200",
             className
           )}
         >
-          {text}
           <Checkbox value={id} checked={completed} onClick={onComplete} />
+          {text}
+          {icon}
         </label>
       </ContextMenuTrigger>
       <ContextMenuContent>
