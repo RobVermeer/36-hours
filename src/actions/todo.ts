@@ -88,9 +88,28 @@ export async function getTodoItems(): Promise<Todo[]> {
     throw new Error("Not logged in")
   }
 
+  const expiredCompleted = new Date()
+  const expired = new Date()
+
+  expiredCompleted.setHours(expiredCompleted.getHours() - 6)
+  expired.setHours(expired.getHours() - 36)
+
   const data = await prisma.todo.findMany({
     where: {
       userId: session.user.id,
+      createdAt: { gte: expired },
+      AND: [
+        {
+          OR: [
+            { completedAt: null },
+            {
+              completedAt: {
+                gte: expiredCompleted,
+              },
+            },
+          ],
+        },
+      ],
     },
   })
 
