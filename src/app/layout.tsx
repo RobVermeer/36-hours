@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   title: "36 hours",
   description: "36 hours to do things.",
   manifest: "/manifest.json",
-  icons: "/launcher-192-192.png",
 }
 
 export default function RootLayout({
