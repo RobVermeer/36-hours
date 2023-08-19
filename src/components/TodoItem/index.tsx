@@ -42,21 +42,35 @@ export function TodoItem({
   var hours = Math.round(
     Math.abs(new Date().getTime() - createdAt.getTime()) / 36e5
   )
-  const className = completed ? "opacity-40 bg-slate-200" : "bg-white"
+  const className = completed
+    ? "opacity-40 bg-slate-200 dark:bg-slate-800"
+    : "bg-white dark:bg-slate-800"
 
   const icon = useMemo(() => {
     if (completed) {
       return <CheckCircle2 size="20" className="text-slate-600 ml-auto" />
     }
     if (hours > 24) {
-      return <Clock11 size="20" className="text-red-600 ml-auto" />
+      return (
+        <Clock11 size="20" className="text-red-600 dark:text-red-400 ml-auto" />
+      )
     }
 
     if (hours > 12) {
-      return <Clock5 size="20" className="text-yellow-600 ml-auto" />
+      return (
+        <Clock5
+          size="20"
+          className="text-yellow-600 dark:text-yellow-400 ml-auto"
+        />
+      )
     }
 
-    return <Clock2 size="20" className="text-green-600 ml-auto" />
+    return (
+      <Clock2
+        size="20"
+        className="text-green-600 dark:text-green-400 ml-auto"
+      />
+    )
   }, [completed, hours])
 
   return (
@@ -64,11 +78,16 @@ export function TodoItem({
       <ContextMenuTrigger>
         <label
           className={cn(
-            "select-none flex gap-2 items-center rounded-md p-2 border border-slate-200",
+            "select-none flex gap-2 items-center rounded-md p-2 border",
             className
           )}
         >
-          <Checkbox value={id} checked={completed} onClick={onComplete} />
+          <Checkbox
+            className="dark:border-slate-600"
+            value={id}
+            checked={completed}
+            onClick={onComplete}
+          />
           {text}
           {icon}
         </label>
@@ -76,16 +95,16 @@ export function TodoItem({
       <ContextMenuContent>
         <ContextMenuItem
           onClick={() => onDelete(id)}
-          className="flex gap-2 text-red-600"
+          className="flex gap-2 text-red-600 dark:text-red-400"
         >
-          <Trash2 size="16" className="text-red-600" /> Remove todo
+          <Trash2 size="16" /> Remove todo
         </ContextMenuItem>
         {completed && (
           <ContextMenuItem
             onClick={() => undoComplete(id)}
             className="flex gap-2"
           >
-            <Undo2 size="16" className="text-yellow-600" />
+            <Undo2 size="16" className="text-yellow-600 dark:text-yellow-400" />
             Undo completed
           </ContextMenuItem>
         )}
@@ -94,7 +113,7 @@ export function TodoItem({
             onClick={() => resetTimer(id)}
             className="flex gap-2"
           >
-            <History size="16" className="text-green-600" />
+            <History size="16" className="text-green-600 dark:text-green-400" />
             Reset timer
           </ContextMenuItem>
         )}

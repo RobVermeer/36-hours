@@ -38,7 +38,7 @@ export default async function Home() {
       >
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Avatar className="m-4 ring-2 ring-white">
+            <Avatar className="m-4 border border-slate-500">
               <AvatarImage
                 src={session.user.image}
                 alt={`@${session.user.name}`}
