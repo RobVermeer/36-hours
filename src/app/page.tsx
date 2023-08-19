@@ -2,15 +2,14 @@ import { Form } from "@/components/Form"
 import { getTodoItems } from "@/actions/todo"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./api/auth/[...nextauth]/route"
-import { Button } from "@/components/ui/button"
 import { LoginWithGithub } from "@/components/LoginWithGithub"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Menu } from "lucide-react"
 import { Logout } from "@/components/Logout"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -39,9 +38,18 @@ export default async function Home() {
       >
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="m-2" variant="ghost" size="icon">
-              <Menu color="white" size="24" />
-            </Button>
+            <Avatar className="m-4 ring-2 ring-white">
+              <AvatarImage
+                src={session.user.image}
+                alt={`@${session.user.name}`}
+              />
+              <AvatarFallback>
+                {session.user.name
+                  .split(" ")
+                  .map((part: string) => part.at(0))
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 mr-2">
             <Logout />
