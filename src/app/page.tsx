@@ -22,7 +22,7 @@ export default async function Home() {
           className="h-64 bg-cover bg-center drop-shadow-xl"
           style={{ backgroundImage: "url('/background.jpg')" }}
         />
-        <section className="p-4 text-center grid gap-2 max-w-[16rem] m-auto">
+        <section className="p-4 grid gap-3 fixed left-0 bottom-0 right-0">
           <LoginWithGithub />
           <LoginWithGoogle />
         </section>
