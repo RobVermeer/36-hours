@@ -19,8 +19,8 @@ export default async function Home() {
     return (
       <main className="grid gap-16">
         <header
-          className="h-64 bg-cover bg-center drop-shadow-lg"
-          style={{ backgroundImage: "url('/header.webp')" }}
+          className="h-64 bg-cover bg-center drop-shadow-xl"
+          style={{ backgroundImage: "url('/background.jpg')" }}
         />
         <section className="p-4 text-center">
           <LoginWithGithub />
@@ -34,8 +34,8 @@ export default async function Home() {
   return (
     <main className="grid h-screen max-h-screen overflow-hidden">
       <header
-        className="flex justify-end h-32 bg-cover bg-center drop-shadow-lg"
-        style={{ backgroundImage: "url('/header.webp')" }}
+        className="flex justify-end h-64 bg-cover bg-center drop-shadow-xl"
+        style={{ backgroundImage: "url('/background.jpg')" }}
       >
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
