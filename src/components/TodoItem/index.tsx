@@ -42,7 +42,7 @@ export function TodoItem({
   var hours = Math.round(
     Math.abs(new Date().getTime() - createdAt.getTime()) / 36e5
   )
-  const className = completed ? "opacity-40 bg-slate-200" : ""
+  const className = completed ? "opacity-40 bg-slate-200" : "bg-white"
 
   const icon = useMemo(() => {
     if (completed) {
