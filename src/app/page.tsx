@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Logout } from "@/components/Logout"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { LoginWithGoogle } from "@/components/LoginWithGoogle"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -21,8 +22,9 @@ export default async function Home() {
           className="h-64 bg-cover bg-center drop-shadow-xl"
           style={{ backgroundImage: "url('/background.jpg')" }}
         />
-        <section className="p-4 text-center">
+        <section className="p-4 text-center grid gap-2 max-w-[16rem] m-auto">
           <LoginWithGithub />
+          <LoginWithGoogle />
         </section>
       </main>
     )
