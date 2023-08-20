@@ -18,7 +18,7 @@ export const List = ({
   resetTimer,
 }: Props) => {
   return (
-    <div className="flex flex-col-reverse fixed p-4 top-64 bottom-14 left-0 right-0 overflow-auto">
+    <div className="flex flex-col-reverse fixed p-4 top-64 bottom-14 left-0 right-0 overflow-auto md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-lg">
       <div className="flex flex-col justify-end gap-2">
         {data.map(({ id, text, completedAt, createdAt }) => (
           <TodoItem
