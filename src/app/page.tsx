@@ -11,6 +11,7 @@ import {
 import { Logout } from "@/components/Logout"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { LoginWithGoogle } from "@/components/LoginWithGoogle"
+import { Logo } from "@/components/Logo"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -19,9 +20,11 @@ export default async function Home() {
     return (
       <main className="grid gap-16">
         <header
-          className="h-64 bg-cover bg-center drop-shadow-xl"
+          className="p-4 flex h-64 bg-cover bg-center fixed top-0 left-0 right-0 items-start justify-between"
           style={{ backgroundImage: "url('/background.jpg')" }}
-        />
+        >
+          <Logo />
+        </header>
         <section className="p-4 grid gap-3 fixed left-0 bottom-0 right-0 md:relative md:max-w-lg md:w-full md:mx-auto">
           <LoginWithGithub />
           <LoginWithGoogle />
@@ -35,12 +38,13 @@ export default async function Home() {
   return (
     <main>
       <header
-        className="flex justify-end h-64 bg-cover bg-center fixed top-0 left-0 right-0"
+        className="p-4 flex h-64 bg-cover bg-center fixed top-0 left-0 right-0 items-start justify-between"
         style={{ backgroundImage: "url('/background.jpg')" }}
       >
+        <Logo />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Avatar className="m-4 border border-slate-500">
+            <Avatar className="border border-slate-500">
               <AvatarImage
                 src={session.user.image}
                 alt={`@${session.user.name}`}
