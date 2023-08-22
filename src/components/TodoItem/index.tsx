@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { MouseEventHandler, useMemo } from "react"
+import { MouseEventHandler, useMemo, useRef, useState } from "react"
 import { Checkbox } from "../ui/checkbox"
 import {
   CheckCircle2,
@@ -7,6 +7,7 @@ import {
   Clock2,
   Clock5,
   History,
+  PenSquare,
   Trash2,
   Undo2,
 } from "lucide-react"
@@ -16,6 +17,9 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "../ui/context-menu"
+import { EditTodo } from "../EditTodo"
+import { Dialog, DialogTrigger } from "../ui/dialog"
+import { editTodo } from "@/actions/todo"
 
 interface Props {
   id: string
@@ -38,6 +42,7 @@ export function TodoItem({
   onDelete,
   resetTimer,
 }: Props) {
+  const [open, setOpen] = useState(false)
   const completed = Boolean(completedAt)
   var hours = Math.round(
     Math.abs(new Date().getTime() - createdAt.getTime()) / 36e5
@@ -79,51 +84,72 @@ export function TodoItem({
   }, [completed, hours])
 
   return (
-    <ContextMenu>
-      <ContextMenuTrigger>
-        <label
-          className={cn(
-            "select-none flex gap-2 items-center rounded-md p-2 border",
-            className
+    <Dialog open={open} onOpenChange={setOpen}>
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <label
+            className={cn(
+              "select-none flex gap-2 items-center rounded-md p-2 border",
+              className
+            )}
+          >
+            <Checkbox
+              className="dark:border-slate-600"
+              value={id}
+              checked={completed}
+              onClick={onComplete}
+              disabled={completed}
+            />
+            {text}
+            {icon}
+          </label>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem
+            onClick={() => onDelete(id)}
+            className="flex gap-2 text-red-600 dark:text-red-400"
+          >
+            <Trash2 size="16" /> Remove todo
+          </ContextMenuItem>
+          {completed && (
+            <ContextMenuItem
+              onClick={() => undoComplete(id)}
+              className="flex gap-2"
+            >
+              <Undo2
+                size="16"
+                className="text-yellow-600 dark:text-yellow-400"
+              />
+              Undo completed
+            </ContextMenuItem>
           )}
-        >
-          <Checkbox
-            className="dark:border-slate-600"
-            value={id}
-            checked={completed}
-            onClick={onComplete}
-            disabled={completed}
-          />
-          {text}
-          {icon}
-        </label>
-      </ContextMenuTrigger>
-      <ContextMenuContent>
-        <ContextMenuItem
-          onClick={() => onDelete(id)}
-          className="flex gap-2 text-red-600 dark:text-red-400"
-        >
-          <Trash2 size="16" /> Remove todo
-        </ContextMenuItem>
-        {completed && (
-          <ContextMenuItem
-            onClick={() => undoComplete(id)}
-            className="flex gap-2"
-          >
-            <Undo2 size="16" className="text-yellow-600 dark:text-yellow-400" />
-            Undo completed
-          </ContextMenuItem>
-        )}
-        {!completed && (
-          <ContextMenuItem
-            onClick={() => resetTimer(id)}
-            className="flex gap-2"
-          >
-            <History size="16" className="text-green-600 dark:text-green-400" />
-            Reset timer
-          </ContextMenuItem>
-        )}
-      </ContextMenuContent>
-    </ContextMenu>
+          {!completed && (
+            <DialogTrigger asChild>
+              <ContextMenuItem className="flex gap-2">
+                <PenSquare
+                  size="16"
+                  className="text-yellow-600 dark:text-yellow-400"
+                />
+                Edit todo
+              </ContextMenuItem>
+            </DialogTrigger>
+          )}
+          {!completed && (
+            <ContextMenuItem
+              onClick={() => resetTimer(id)}
+              className="flex gap-2"
+            >
+              <History
+                size="16"
+                className="text-green-600 dark:text-green-400"
+              />
+              Reset timer
+            </ContextMenuItem>
+          )}
+        </ContextMenuContent>
+      </ContextMenu>
+
+      <EditTodo id={id} text={text} close={() => setOpen(false)} />
+    </Dialog>
   )
 }
