@@ -120,6 +120,10 @@ export async function deleteTodo(id: string) {
   revalidatePath("/")
 }
 
+export async function refresh() {
+  revalidatePath("/")
+}
+
 export async function getTodoItems(): Promise<Todo[]> {
   const session = await getServerSession(authOptions)
 

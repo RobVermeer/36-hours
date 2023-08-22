@@ -4,11 +4,13 @@ import {
   addTodo,
   completeTodo,
   deleteTodo,
+  refresh,
   resetTimer,
   undoCompleteTodo,
 } from "@/actions/todo"
 import {
   MouseEvent,
+  useEffect,
   experimental_useOptimistic as useOptimistic,
   useRef,
 } from "react"
@@ -64,6 +66,17 @@ function reducer(state: Todo[], action: Action): Todo[] {
 export const Form = ({ data }: Props) => {
   const [optimisticData, addOptimisticData] = useOptimistic(data, reducer)
   const formRef = useRef<HTMLFormElement>(null)
+
+  useEffect(() => {
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        console.log("hello")
+
+        refresh()
+      }
+    })
+  }, [])
+
   async function handleSubmit(data: FormData) {
     try {
       addOptimisticData({
