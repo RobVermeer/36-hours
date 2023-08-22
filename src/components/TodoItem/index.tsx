@@ -109,7 +109,8 @@ export function TodoItem({
             onClick={() => onDelete(id)}
             className="flex gap-2 text-red-600 dark:text-red-400"
           >
-            <Trash2 size="16" /> Remove todo
+            <Trash2 size="16" className="text-red-600 dark:text-red-400" />{" "}
+            Remove todo
           </ContextMenuItem>
           {completed && (
             <ContextMenuItem
