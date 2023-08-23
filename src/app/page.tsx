@@ -3,7 +3,7 @@ import { getTodoItems } from "@/actions/todo"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./api/auth/[...nextauth]/route"
 import { Header } from "@/components/Header"
-import { LoginButtons } from "@/components/LoginButtons"
+import { Login } from "@/components/Login"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -12,7 +12,7 @@ export default async function Home() {
     return (
       <>
         <Header />
-        <LoginButtons />
+        <Login />
       </>
     )
   }

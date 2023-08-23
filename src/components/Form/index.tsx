@@ -15,8 +15,8 @@ import {
   useRef,
 } from "react"
 import { AddTodo } from "@/components/AddTodo"
-import { List } from "../List"
-import { Input } from "../ui/input"
+import { List } from "@/components/List"
+import { Input } from "@/components/ui/input"
 import { Todo } from "@prisma/client"
 
 interface Props {

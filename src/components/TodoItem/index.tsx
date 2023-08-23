@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
-import { MouseEventHandler, useMemo, useRef, useState } from "react"
-import { Checkbox } from "../ui/checkbox"
+import { MouseEventHandler, useMemo, useState } from "react"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   CheckCircle2,
   Clock11,
@@ -16,10 +16,9 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from "../ui/context-menu"
-import { EditTodo } from "../EditTodo"
-import { Dialog, DialogTrigger } from "../ui/dialog"
-import { editTodo } from "@/actions/todo"
+} from "@/components/ui/context-menu"
+import { EditTodo } from "@/components/EditTodo"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 
 interface Props {
   id: string

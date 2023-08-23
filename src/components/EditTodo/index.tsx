@@ -1,13 +1,12 @@
 import { useRef, useState } from "react"
-import { Button } from "../ui/button"
-import { ContextMenuItem } from "../ui/context-menu"
+import { Button } from "@/components/ui/button"
 import {
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog"
-import { Input } from "../ui/input"
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
 import { PenSquare } from "lucide-react"
 import { editTodo } from "@/actions/todo"
 

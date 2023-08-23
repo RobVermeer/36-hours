@@ -1,6 +1,6 @@
 import { Todo } from "@prisma/client"
 import { MouseEventHandler } from "react"
-import { TodoItem } from "../TodoItem"
+import { TodoItem } from "@/components/TodoItem"
 
 interface Props {
   data: Todo[]
