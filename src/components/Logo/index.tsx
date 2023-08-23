@@ -6,6 +6,7 @@ export function Logo() {
     <Link
       href="/"
       className="text-white text-xl leading-none flex items-center"
+      scroll={false}
     >
       36 h
       <Clock5
