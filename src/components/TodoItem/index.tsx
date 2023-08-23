@@ -7,7 +7,9 @@ import {
   Clock2,
   Clock5,
   History,
+  PartyPopper,
   PenSquare,
+  TimerOff,
   Trash2,
   Undo2,
 } from "lucide-react"
@@ -53,12 +55,22 @@ export function TodoItem({
   const icon = useMemo(() => {
     if (completed) {
       return (
-        <CheckCircle2
+        <PartyPopper
           size="20"
           className="text-slate-600 dark:text-slate-400 ml-auto"
         />
       )
     }
+
+    if (hours > 36) {
+      return (
+        <TimerOff
+          size="20"
+          className="text-slate-600 dark:text-slate-400 ml-auto"
+        />
+      )
+    }
+
     if (hours > 24) {
       return (
         <Clock11 size="20" className="text-red-600 dark:text-red-400 ml-auto" />
@@ -104,10 +116,7 @@ export function TodoItem({
           </label>
         </ContextMenuTrigger>
         <ContextMenuContent>
-          <ContextMenuItem
-            onClick={() => onDelete(id)}
-            className="flex gap-2 text-red-600 dark:text-red-400"
-          >
+          <ContextMenuItem onClick={() => onDelete(id)} className="flex gap-2">
             <Trash2 size="16" className="text-red-600 dark:text-red-400" />{" "}
             Remove todo
           </ContextMenuItem>

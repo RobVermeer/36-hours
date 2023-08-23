@@ -158,3 +158,42 @@ export async function getTodoItems(): Promise<Todo[]> {
 
   return data
 }
+
+export async function getExpiredTodoItems(): Promise<Todo[]> {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    throw new Error("Not logged in")
+  }
+
+  const expired = new Date()
+
+  expired.setHours(expired.getHours() - 36)
+
+  const data = await prisma.todo.findMany({
+    where: {
+      userId: session.user.id,
+      createdAt: { lte: expired },
+      completedAt: null,
+    },
+  })
+
+  return data
+}
+
+export async function getCompletedTodoItems(): Promise<Todo[]> {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    throw new Error("Not logged in")
+  }
+
+  const data = await prisma.todo.findMany({
+    where: {
+      userId: session.user.id,
+      completedAt: { not: null },
+    },
+  })
+
+  return data
+}

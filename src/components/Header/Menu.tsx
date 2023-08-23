@@ -9,7 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { signOut } from "next-auth/react"
-import { LogOut } from "lucide-react"
+import { CheckCheck, ListTodo, LogOut, TimerOff } from "lucide-react"
+import Link from "next/link"
 
 interface Props {
   session: Session
@@ -31,6 +32,29 @@ export function Menu({ session }: Props) {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mr-2">
+        <DropdownMenuItem className="flex gap-2 align-center" asChild>
+          <Link href="/">
+            <ListTodo size="16" /> Todo
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex gap-2 align-center" asChild>
+          <Link href="/completed">
+            <CheckCheck
+              className="text-green-600 dark:text-green-400"
+              size="16"
+            />{" "}
+            Completed
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex gap-2 align-center" asChild>
+          <Link href="/expired">
+            <TimerOff
+              className="text-yellow-600 dark:text-yellow-400"
+              size="16"
+            />{" "}
+            Expired
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem
           className="flex gap-2 align-center"
           onClick={() => signOut()}
