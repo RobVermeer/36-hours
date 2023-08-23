@@ -3,7 +3,7 @@ import { Logo } from "../Logo"
 import { Menu } from "./Menu"
 
 interface Props {
-  session?: Session
+  session: Session | null
 }
 
 export async function Header({ session }: Props) {
