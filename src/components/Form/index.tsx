@@ -70,8 +70,6 @@ export const Form = ({ data }: Props) => {
   useEffect(() => {
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
-        console.log("hello")
-
         refresh()
       }
     })

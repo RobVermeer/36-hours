@@ -33,12 +33,12 @@ export function Menu({ session }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mr-2">
         <DropdownMenuItem className="flex gap-2 align-center" asChild>
-          <Link href="/">
+          <Link href="/" scroll={false}>
             <ListTodo size="16" /> Todo
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="flex gap-2 align-center" asChild>
-          <Link href="/completed">
+          <Link href="/completed" scroll={false}>
             <CheckCheck
               className="text-green-600 dark:text-green-400"
               size="16"
@@ -47,7 +47,7 @@ export function Menu({ session }: Props) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="flex gap-2 align-center" asChild>
-          <Link href="/expired">
+          <Link href="/expired" scroll={false}>
             <TimerOff
               className="text-yellow-600 dark:text-yellow-400"
               size="16"
