@@ -13,11 +13,13 @@ import {
   useEffect,
   experimental_useOptimistic as useOptimistic,
   useRef,
+  useState,
 } from "react"
 import { AddTodo } from "@/components/AddTodo"
 import { List } from "@/components/List"
 import { Input } from "@/components/ui/input"
 import { Todo } from "@prisma/client"
+import { useRouter } from "next/navigation"
 
 interface Props {
   data: Todo[]
@@ -66,6 +68,19 @@ function reducer(state: Todo[], action: Action): Todo[] {
 export const Form = ({ data }: Props) => {
   const [optimisticData, addOptimisticData] = useOptimistic(data, reducer)
   const formRef = useRef<HTMLFormElement>(null)
+  const { replace } = useRouter()
+  const [text, setText] = useState("")
+
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const initialText = url.searchParams.get("text")
+
+    if (!initialText) return
+
+    setText((previousText) => (previousText ? previousText : initialText))
+
+    replace(url.pathname, { scroll: false })
+  }, [replace])
 
   useEffect(() => {
     document.addEventListener("visibilitychange", () => {
@@ -147,7 +162,12 @@ export const Form = ({ data }: Props) => {
         action={handleSubmit}
         className="bg-white dark:bg-slate-900 flex gap-2 fixed p-4 bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-lg"
       >
-        <Input name="text" required />
+        <Input
+          name="text"
+          value={text}
+          onChange={(event) => setText(event.currentTarget.value)}
+          required
+        />
         <AddTodo />
       </form>
     </>
