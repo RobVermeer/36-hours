@@ -2,7 +2,7 @@
   "id": "/",
   "name": "36 hours",
   "short_name": "36 hours",
-  "start_url": "https://36.robvermeer.nl",
+  "start_url": ".",
   "display": "standalone",
   "display_override": ["standalone", "fullscreen", "minimal-ui"],
   "background_color": "#49de80",
@@ -13,6 +13,7 @@
   "share_target": {
     "action": "/",
     "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
     "params": {
       "title": "title",
       "text": "text",
@@ -23,15 +24,32 @@
     {
       "name": "New todo",
       "url": "/",
-      "description": "Create a new todo"
+      "icons": [
+        {
+          "src": "shortcuts/plus.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Completed",
-      "url": "/completed"
+      "url": "/completed",
+      "icons": [
+        {
+          "src": "shortcuts/check-check.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Expired",
-      "url": "/expired"
+      "url": "/expired",
+      "icons": [
+        {
+          "src": "shortcuts/timer-off.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
   "icons": [
