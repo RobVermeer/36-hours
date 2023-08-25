@@ -13,7 +13,6 @@ import {
   useEffect,
   experimental_useOptimistic as useOptimistic,
   useRef,
-  useState,
 } from "react"
 import { AddTodo } from "@/components/AddTodo"
 import { List } from "@/components/List"
@@ -69,17 +68,20 @@ export const Form = ({ data }: Props) => {
   const [optimisticData, addOptimisticData] = useOptimistic(data, reducer)
   const formRef = useRef<HTMLFormElement>(null)
   const { replace } = useRouter()
-  const [text, setText] = useState("")
 
   useEffect(() => {
     const url = new URL(window.location.href)
-    const initialText = url.searchParams.get("text")
+    const initialText = url.searchParams.get("title")
 
-    if (!initialText) return
+    if (!initialText || !formRef.current) return
 
-    setText((previousText) => (previousText ? previousText : initialText))
+    if ("text" in formRef.current.elements) {
+      const text = formRef.current.elements.text as HTMLInputElement
 
-    replace(url.pathname, { scroll: false })
+      text.value = initialText
+
+      replace(url.pathname, { scroll: false })
+    }
   }, [replace])
 
   useEffect(() => {
@@ -162,12 +164,7 @@ export const Form = ({ data }: Props) => {
         action={handleSubmit}
         className="bg-white dark:bg-slate-900 flex gap-2 fixed p-4 bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-lg"
       >
-        <Input
-          name="text"
-          value={text}
-          onChange={(event) => setText(event.currentTarget.value)}
-          required
-        />
+        <Input name="text" required />
         <AddTodo />
       </form>
     </>
