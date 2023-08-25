@@ -71,7 +71,7 @@ export const Form = ({ data }: Props) => {
 
   useEffect(() => {
     const url = new URL(window.location.href)
-    const initialText = url.searchParams.get("title")
+    const initialText = url.searchParams.get("text")
 
     if (!initialText || !formRef.current) return
 
