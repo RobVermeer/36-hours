@@ -2,11 +2,38 @@
   "id": "/",
   "name": "36 hours",
   "short_name": "36 hours",
-  "start_url": ".",
+  "start_url": "https://36.robvermeer.nl",
   "display": "standalone",
   "display_override": ["standalone", "fullscreen", "minimal-ui"],
   "background_color": "#49de80",
+  "theme_color": "#49de80",
   "description": "36 hours to do things.",
+  "categories": ["productivity"],
+  "orientation": "portrait",
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "shortcuts": [
+    {
+      "name": "New todo",
+      "url": "/",
+      "description": "Create a new todo"
+    },
+    {
+      "name": "Completed",
+      "url": "/completed"
+    },
+    {
+      "name": "Expired",
+      "url": "/expired"
+    }
+  ],
   "icons": [
     {
       "src": "windows11/SmallTile.scale-100.png",
