@@ -1,6 +1,7 @@
 import { Todo } from "@prisma/client"
 import { MouseEventHandler } from "react"
 import { TodoItem } from "@/components/TodoItem"
+import { Rocket } from "lucide-react"
 
 interface Props {
   data: Todo[]
@@ -20,6 +21,14 @@ export const List = ({
   return (
     <div className="flex flex-col-reverse fixed p-4 top-64 bottom-14 left-0 right-0 overflow-auto md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-lg">
       <div className="flex flex-col justify-end gap-2">
+        {data.length === 0 && (
+          <div className="text-center">
+            <Rocket
+              className="inline text-slate-100 dark:text-slate-800"
+              size={64}
+            />
+          </div>
+        )}
         {data.map(({ id, text, completedAt, createdAt }) => (
           <TodoItem
             key={id}
