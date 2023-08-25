@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils"
 import { MouseEventHandler, useMemo, useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
-  CheckCircle2,
   Clock11,
   Clock2,
   Clock5,
@@ -117,7 +116,7 @@ export function TodoItem({
         </ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuItem onClick={() => onDelete(id)} className="flex gap-2">
-            <Trash2 size="16" className="text-red-600 dark:text-red-400" />{" "}
+            <Trash2 size="16" className="text-red-600 dark:text-red-400" />
             Remove todo
           </ContextMenuItem>
           {completed && (

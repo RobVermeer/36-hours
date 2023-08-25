@@ -6,6 +6,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { signOut } from "next-auth/react"
@@ -55,6 +56,7 @@ export function Menu({ session }: Props) {
             Expired
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="flex gap-2 align-center"
           onClick={() => signOut()}
