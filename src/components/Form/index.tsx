@@ -29,11 +29,17 @@ export const Form = () => {
   }, [replace])
 
   useEffect(() => {
-    document.addEventListener("visibilitychange", () => {
+    const refreshData = () => {
       if (!document.hidden) {
         refresh()
       }
-    })
+    }
+
+    document.addEventListener("visibilitychange", refreshData, false)
+
+    return () => {
+      document.removeEventListener("visibilitychange", refreshData)
+    }
   }, [])
 
   async function handleSubmit(data: FormData) {
