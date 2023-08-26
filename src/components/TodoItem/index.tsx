@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { MouseEventHandler, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Clock11,
@@ -20,28 +20,17 @@ import {
 } from "@/components/ui/context-menu"
 import { EditTodo } from "@/components/EditTodo"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+import { useTodos } from "@/context/todos"
 
 interface Props {
   id: string
   text: string
   completedAt: Date | null
   createdAt: Date
-  onComplete: MouseEventHandler<HTMLButtonElement>
-  onDelete: (id: string) => void
-  undoComplete: (id: string) => void
-  resetTimer: (id: string) => void
 }
 
-export function TodoItem({
-  id,
-  text,
-  completedAt,
-  createdAt,
-  onComplete,
-  undoComplete,
-  onDelete,
-  resetTimer,
-}: Props) {
+export function TodoItem({ id, text, completedAt, createdAt }: Props) {
+  const { remove, undoComplete, reset, complete } = useTodos()
   const [open, setOpen] = useState(false)
   const completed = Boolean(completedAt)
   var hours = Math.round(
@@ -107,7 +96,7 @@ export function TodoItem({
               className="dark:border-slate-600"
               value={id}
               checked={completed}
-              onClick={onComplete}
+              onClick={complete}
               disabled={completed}
             />
             {text}
@@ -115,7 +104,7 @@ export function TodoItem({
           </label>
         </ContextMenuTrigger>
         <ContextMenuContent>
-          <ContextMenuItem onClick={() => onDelete(id)} className="flex gap-2">
+          <ContextMenuItem onClick={() => remove(id)} className="flex gap-2">
             <Trash2 size="16" className="text-red-600 dark:text-red-400" />
             Remove todo
           </ContextMenuItem>
@@ -143,10 +132,7 @@ export function TodoItem({
             </DialogTrigger>
           )}
           {!completed && (
-            <ContextMenuItem
-              onClick={() => resetTimer(id)}
-              className="flex gap-2"
-            >
+            <ContextMenuItem onClick={() => reset(id)} className="flex gap-2">
               <History
                 size="16"
                 className="text-green-600 dark:text-green-400"
