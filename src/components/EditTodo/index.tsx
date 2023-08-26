@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { PenSquare } from "lucide-react"
-import { editTodo } from "@/actions/todo"
+import { useTodos } from "@/context/todos"
 
 interface Props {
   id: string
@@ -17,10 +17,11 @@ interface Props {
 }
 
 export function EditTodo({ id, text, close }: Props) {
+  const { edit } = useTodos()
   const formRef = useRef<HTMLFormElement>(null)
   async function handleSubmit(data: FormData) {
     try {
-      await editTodo(id, data)
+      await edit(id, data)
       close()
     } catch {}
   }

@@ -4,6 +4,7 @@ import {
   addTodo,
   completeTodo,
   deleteTodo,
+  editTodo,
   resetTimer,
   undoCompleteTodo,
 } from "@/actions/todo"
@@ -20,11 +21,12 @@ import {
 
 interface TodosContext {
   items: Todo[]
-  add: (data: FormData) => void
-  complete: (event: MouseEvent<HTMLButtonElement>) => void
-  undoComplete: (id: string) => void
-  remove: (id: string) => void
-  reset: (id: string) => void
+  add: (data: FormData) => Promise<void>
+  complete: (event: MouseEvent<HTMLButtonElement>) => Promise<void>
+  undoComplete: (id: string) => Promise<void>
+  remove: (id: string) => Promise<void>
+  reset: (id: string) => Promise<void>
+  edit: (id: string, data: FormData) => Promise<void>
 }
 
 const todosContext = createContext<TodosContext | undefined>(undefined)
@@ -60,6 +62,14 @@ function reducer(state: Todo[], action: Action): Todo[] {
       return state.map((item) => {
         if (item.id === action.payload.id) {
           item.createdAt = new Date()
+        }
+
+        return item
+      })
+    case "edit_todo":
+      return state.map((item) => {
+        if (item.id === action.payload.id) {
+          item.text = action.payload.text
         }
 
         return item
@@ -148,6 +158,19 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
     [addOptimisticItems]
   )
 
+  const edit = useCallback(
+    async (id: string, data: FormData) => {
+      try {
+        addOptimisticItems({
+          type: "edit_todo",
+          payload: { id, text: data.get("newText") },
+        })
+        await editTodo(id, data)
+      } catch {}
+    },
+    [addOptimisticItems]
+  )
+
   const value = useMemo(
     () => ({
       items,
@@ -156,8 +179,9 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
       undoComplete,
       remove,
       reset,
+      edit,
     }),
-    [add, complete, items, remove, reset, undoComplete]
+    [add, complete, items, remove, reset, undoComplete, edit]
   )
 
   return <todosContext.Provider value={value}>{children}</todosContext.Provider>
