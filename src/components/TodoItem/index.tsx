@@ -143,7 +143,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
         </ContextMenuContent>
       </ContextMenu>
 
-      <EditTodo id={id} text={text} close={() => setOpen(false)} />
+      <EditTodo id={id} text={text} open={open} close={() => setOpen(false)} />
     </Dialog>
   )
 }

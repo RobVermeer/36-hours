@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   DialogContent,
@@ -13,20 +13,25 @@ import { useTodos } from "@/context/todos"
 interface Props {
   id: string
   text: string
+  open: boolean
   close: () => void
 }
 
-export function EditTodo({ id, text, close }: Props) {
+export function EditTodo({ id, text, open, close }: Props) {
+  const [newText, setNewText] = useState(text)
   const { edit } = useTodos()
   const formRef = useRef<HTMLFormElement>(null)
+
+  useEffect(() => {
+    setNewText(text)
+  }, [open, text])
+
   async function handleSubmit(data: FormData) {
     try {
       await edit(id, data)
       close()
     } catch {}
   }
-
-  const [newText, setNewText] = useState(text)
 
   return (
     <DialogContent>
