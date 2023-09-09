@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "36 hours",
   description: "36 hours to do things.",
   manifest: "/manifest.json",
+  themeColor: "#49de80",
 }
 
 export default async function RootLayout({
