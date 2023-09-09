@@ -1,5 +1,6 @@
 import "./globals.css"
 import type { Metadata } from "next"
+import { headers } from "next/headers"
 import { getServerSession } from "next-auth"
 import { Ubuntu } from "next/font/google"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
@@ -8,11 +9,16 @@ import { Login } from "@/components/Login"
 
 const ubuntu = Ubuntu({ weight: ["400"], subsets: ["latin"] })
 
-export const metadata: Metadata = {
-  title: "36 hours",
-  description: "36 hours to do things.",
-  manifest: "/manifest.json",
-  themeColor: "#49de80",
+export async function generateMetadata(): Promise<Metadata> {
+  const headersList = headers()
+  const colorScheme = headersList.get("sec-ch-prefers-color-scheme")
+
+  return {
+    title: "36 hours",
+    description: "36 hours to do things.",
+    manifest: "/manifest.json",
+    themeColor: colorScheme === "dark" ? "#0f172a" : "#ffffff",
+  }
 }
 
 export default async function RootLayout({
