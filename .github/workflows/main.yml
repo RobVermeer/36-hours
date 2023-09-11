@@ -16,7 +16,9 @@ jobs:
         with:
           bun-version: latest
       - name: Install dependencies ⏳
-        run: bun install
+        run: bun install --frozen-lockfile
+      - name: Generate Prisma files 🪢
+        run: bun run prisma generate
       - name: Build website 👷‍♀️
         run: bun run build
       - name: Copy prisma folder 💾
