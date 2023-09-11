@@ -12,19 +12,13 @@ jobs:
     steps:
       - name: Checkout latest code 🚚
         uses: actions/checkout@v3
-      - name: Restore cache 📀
-        uses: actions/cache@v3
+      - uses: oven-sh/setup-bun@v1
         with:
-          path: |
-            ~/.npm
-            ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+          bun-version: latest
       - name: Install dependencies ⏳
-        run: npm ci
+        run: bun install --frozen-lockfile
       - name: Build website 👷‍♀️
-        run: npm run build
+        run: bun run build
       - name: Copy prisma folder 💾
         run: cp -R prisma/ .next/standalone/prisma/
       - name: Copy public folder 🚝
