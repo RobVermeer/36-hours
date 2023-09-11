@@ -45,7 +45,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
       return (
         <PartyPopper
           size="20"
-          className="text-slate-600 dark:text-slate-400 ml-auto"
+          className="shrink-0 text-slate-600 dark:text-slate-400 ml-auto"
         />
       )
     }
@@ -54,14 +54,14 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
       return (
         <TimerOff
           size="20"
-          className="text-slate-600 dark:text-slate-400 ml-auto"
+          className="shrink-0 text-slate-600 dark:text-slate-400 ml-auto"
         />
       )
     }
 
     if (hours > 24) {
       return (
-        <Clock11 size="20" className="text-red-600 dark:text-red-400 ml-auto" />
+        <Clock11 size="20" className="shrink-0 text-red-600 dark:text-red-400 ml-auto" />
       )
     }
 
@@ -69,7 +69,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
       return (
         <Clock5
           size="20"
-          className="text-yellow-600 dark:text-yellow-400 ml-auto"
+          className="shrink-0 text-yellow-600 dark:text-yellow-400 ml-auto"
         />
       )
     }
@@ -77,7 +77,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
     return (
       <Clock2
         size="20"
-        className="text-green-600 dark:text-green-400 ml-auto"
+        className="shrink-0 text-green-600 dark:text-green-400 ml-auto"
       />
     )
   }, [completed, hours])
