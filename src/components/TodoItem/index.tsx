@@ -33,7 +33,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
   const { remove, undoComplete, reset, complete } = useTodos()
   const [open, setOpen] = useState(false)
   const completed = Boolean(completedAt)
-  var hours = Math.round(
+  const hours = Math.ceil(
     Math.abs(new Date().getTime() - createdAt.getTime()) / 36e5
   )
   const className = completed
