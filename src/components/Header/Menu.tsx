@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { signOut } from "next-auth/react"
-import { CheckCheck, ListTodo, LogOut, TimerOff } from "lucide-react"
+import { CheckCheck, FileClock, ListTodo, LogOut, TimerOff } from "lucide-react"
 import Link from "next/link"
 
 interface Props {
@@ -54,6 +54,15 @@ export function Menu({ session }: Props) {
               size="16"
             />{" "}
             Expired
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex gap-2 align-center" asChild>
+          <Link href="/backlog" scroll={false}>
+            <FileClock
+              className="text-slate-600 dark:text-slate-400"
+              size="16"
+            />{" "}
+            Backlog
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

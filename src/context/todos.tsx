@@ -5,6 +5,7 @@ import {
   completeTodo,
   deleteTodo,
   editTodo,
+  removeCreatedAt,
   resetTimer,
   undoCompleteTodo,
 } from "@/actions/todo"
@@ -21,12 +22,13 @@ import {
 
 interface TodosContext {
   items: Todo[]
-  add: (data: FormData) => Promise<void>
+  add: (data: FormData, backlog: boolean) => Promise<void>
   complete: (event: MouseEvent<HTMLButtonElement>) => Promise<void>
   undoComplete: (id: string) => Promise<void>
   remove: (id: string) => Promise<void>
   reset: (id: string) => Promise<void>
   edit: (id: string, data: FormData) => Promise<void>
+  moveToBacklog: (id: string) => Promise<void>
 }
 
 const todosContext = createContext<TodosContext | undefined>(undefined)
@@ -74,6 +76,14 @@ function reducer(state: Todo[], action: Action): Todo[] {
 
         return item
       })
+    case "move_to_backlog":
+      return state.map((item) => {
+        if (item.id === action.payload.id) {
+          item.createdAt = null
+        }
+
+        return item
+      })
   }
 
   throw Error("Unknown action.")
@@ -88,17 +98,17 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
   const [items, addOptimisticItems] = useOptimistic(initialItems, reducer)
 
   const add = useCallback(
-    async (data: FormData) => {
+    async (data: FormData, backlog: boolean) => {
       try {
         addOptimisticItems({
           type: "add_todo",
           payload: {
             id: crypto.randomUUID(),
             text: data.get("text"),
-            createdAt: new Date(),
+            createdAt: backlog ? null : new Date(),
           },
         })
-        await addTodo(data)
+        await addTodo(data, backlog)
       } catch {}
     },
     [addOptimisticItems]
@@ -171,6 +181,19 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
     [addOptimisticItems]
   )
 
+  const moveToBacklog = useCallback(
+    async (id: string) => {
+      try {
+        addOptimisticItems({
+          type: "move_to_backlog",
+          payload: { id },
+        })
+        await removeCreatedAt(id)
+      } catch {}
+    },
+    [addOptimisticItems]
+  )
+
   const value = useMemo(
     () => ({
       items,
@@ -180,8 +203,9 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
       remove,
       reset,
       edit,
+      moveToBacklog,
     }),
-    [add, complete, items, remove, reset, undoComplete, edit]
+    [add, complete, items, remove, reset, undoComplete, edit, moveToBacklog]
   )
 
   return <todosContext.Provider value={value}>{children}</todosContext.Provider>

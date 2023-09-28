@@ -8,7 +8,11 @@ import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
 import { useTodos } from "@/context/todos"
 
-export const Form = () => {
+interface Props {
+  backlog?: boolean
+}
+
+export const Form = ({ backlog = false }: Props) => {
   const { add } = useTodos()
   const formRef = useRef<HTMLFormElement>(null)
   const { replace } = useRouter()
@@ -45,7 +49,7 @@ export const Form = () => {
   async function handleSubmit(data: FormData) {
     if (!formRef.current) return
 
-    add(data)
+    add(data, backlog)
     formRef.current.reset()
   }
 

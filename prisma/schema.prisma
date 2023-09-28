@@ -60,7 +60,7 @@ model Todo {
   id          String    @id @default(cuid())
   text        String
   userId      String?
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime?
   completedAt DateTime?
   deletedAt   DateTime?
   user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)

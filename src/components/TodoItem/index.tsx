@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils"
 import { useMemo, useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
+  ClipboardSignature,
   Clock11,
   Clock2,
   Clock5,
@@ -30,17 +31,26 @@ interface Props {
 }
 
 export function TodoItem({ id, text, completedAt, createdAt }: Props) {
-  const { remove, undoComplete, reset, complete } = useTodos()
+  const { remove, undoComplete, reset, complete, moveToBacklog } = useTodos()
   const [open, setOpen] = useState(false)
   const completed = Boolean(completedAt)
-  const hours = Math.ceil(
-    Math.abs(new Date().getTime() - createdAt.getTime()) / 36e5
-  )
+  const hours = createdAt
+    ? Math.ceil(Math.abs(new Date().getTime() - createdAt.getTime()) / 36e5)
+    : 0
   const className = completed
     ? "opacity-40 bg-slate-200 dark:bg-slate-800"
     : "bg-white dark:bg-slate-800"
 
   const icon = useMemo(() => {
+    if (!createdAt) {
+      return (
+        <ClipboardSignature
+          size="20"
+          className="shrink-0 text-slate-600 dark:text-slate-400 ml-auto"
+        />
+      )
+    }
+
     if (completed) {
       return (
         <PartyPopper
@@ -61,7 +71,10 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
 
     if (hours > 24) {
       return (
-        <Clock11 size="20" className="shrink-0 text-red-600 dark:text-red-400 ml-auto" />
+        <Clock11
+          size="20"
+          className="shrink-0 text-red-600 dark:text-red-400 ml-auto"
+        />
       )
     }
 
@@ -80,7 +93,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
         className="shrink-0 text-green-600 dark:text-green-400 ml-auto"
       />
     )
-  }, [completed, hours])
+  }, [completed, hours, createdAt])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -97,7 +110,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
               value={id}
               checked={completed}
               onClick={complete}
-              disabled={completed}
+              disabled={completed || !createdAt}
             />
             {text}
             {icon}
@@ -138,6 +151,18 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
                 className="text-green-600 dark:text-green-400"
               />
               Reset timer
+            </ContextMenuItem>
+          )}
+          {!completed && Boolean(createdAt) && (
+            <ContextMenuItem
+              onClick={() => moveToBacklog(id)}
+              className="flex gap-2"
+            >
+              <ClipboardSignature
+                size="16"
+                className="text-slate-600 dark:text-slate-400"
+              />
+              Move to backlog
             </ContextMenuItem>
           )}
         </ContextMenuContent>

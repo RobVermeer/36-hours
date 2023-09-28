@@ -6,7 +6,7 @@ import { Todo } from "@prisma/client"
 import { getServerSession } from "next-auth"
 import { revalidatePath } from "next/cache"
 
-export async function addTodo(data: FormData) {
+export async function addTodo(data: FormData, backlog: boolean) {
   const text = data.get("text")?.toString()
 
   if (!text) return
@@ -21,6 +21,7 @@ export async function addTodo(data: FormData) {
     data: {
       userId: session.user.id,
       text,
+      createdAt: backlog ? null : new Date(),
     },
   })
 
@@ -75,6 +76,25 @@ export async function resetTimer(id: string) {
   await prisma.todo.update({
     data: {
       createdAt: new Date(),
+    },
+    where: {
+      id,
+    },
+  })
+
+  revalidatePath("/")
+}
+
+export async function removeCreatedAt(id: string) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    throw new Error("Not logged in")
+  }
+
+  await prisma.todo.update({
+    data: {
+      createdAt: null,
     },
     where: {
       id,
@@ -192,6 +212,23 @@ export async function getCompletedTodoItems(): Promise<Todo[]> {
     where: {
       userId: session.user.id,
       completedAt: { not: null },
+    },
+  })
+
+  return data
+}
+
+export async function getBacklogTodoItems(): Promise<Todo[]> {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    throw new Error("Not logged in")
+  }
+
+  const data = await prisma.todo.findMany({
+    where: {
+      userId: session.user.id,
+      createdAt: null,
     },
   })
 
