@@ -27,7 +27,7 @@ interface Props {
   id: string
   text: string
   completedAt: Date | null
-  createdAt: Date
+  createdAt: Date | null
 }
 
 export function TodoItem({ id, text, completedAt, createdAt }: Props) {
