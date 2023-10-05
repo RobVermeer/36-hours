@@ -1,12 +1,19 @@
+import { cn } from "@/lib/utils"
 import { Clock5 } from "lucide-react"
 import Link from "next/link"
 
-export function Logo() {
+interface Props {
+  className?: string
+  onClick?: () => void
+}
+
+export function Logo({ className = "text-white", onClick }: Props) {
   return (
     <Link
       href="/"
-      className="text-white text-xl leading-none flex items-center"
+      className={cn(className, "text-xl leading-none flex items-center ")}
       scroll={false}
+      onClick={onClick}
     >
       36 h
       <Clock5
