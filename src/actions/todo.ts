@@ -213,6 +213,11 @@ export async function getCompletedTodoItems(): Promise<Todo[]> {
       userId: session.user.id,
       completedAt: { not: null },
     },
+    orderBy: {
+      completedAt: {
+        sort: "asc",
+      },
+    },
   })
 
   return data
