@@ -37,7 +37,7 @@ export function Menu({ session }: Props) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Avatar className="border border-slate-500">
+        <Avatar className="border border-slate-500 cursor-pointer">
           <AvatarImage src={session.user.image} alt={`@${session.user.name}`} />
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
