@@ -279,18 +279,7 @@ export async function getStats() {
     where: {
       userId: session.user.id,
       createdAt: { gte: expired },
-      AND: [
-        {
-          OR: [
-            { completedAt: null },
-            {
-              completedAt: {
-                gte: expiredCompleted,
-              },
-            },
-          ],
-        },
-      ],
+      completedAt: null,
     },
   })
 
