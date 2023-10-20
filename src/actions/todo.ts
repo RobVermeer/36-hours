@@ -239,3 +239,60 @@ export async function getBacklogTodoItems(): Promise<Todo[]> {
 
   return data
 }
+
+export async function getStats() {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    throw new Error("Not logged in")
+  }
+
+  const backlogCount = await prisma.todo.count({
+    where: {
+      userId: session.user.id,
+      createdAt: null,
+    },
+  })
+
+  const completedCount = await prisma.todo.count({
+    where: {
+      userId: session.user.id,
+      completedAt: { not: null },
+    },
+  })
+
+  const expired = new Date()
+  const expiredCompleted = new Date()
+
+  expired.setHours(expired.getHours() - 36)
+  expiredCompleted.setHours(expiredCompleted.getHours() - 6)
+
+  const expiredCount = await prisma.todo.count({
+    where: {
+      userId: session.user.id,
+      createdAt: { lte: expired },
+      completedAt: null,
+    },
+  })
+
+  const activeCount = await prisma.todo.count({
+    where: {
+      userId: session.user.id,
+      createdAt: { gte: expired },
+      AND: [
+        {
+          OR: [
+            { completedAt: null },
+            {
+              completedAt: {
+                gte: expiredCompleted,
+              },
+            },
+          ],
+        },
+      ],
+    },
+  })
+
+  return { backlogCount, completedCount, expiredCount, activeCount }
+}

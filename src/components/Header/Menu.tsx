@@ -3,7 +3,14 @@
 import { Session } from "next-auth"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { signOut } from "next-auth/react"
-import { CheckCheck, FileClock, ListTodo, LogOut, TimerOff } from "lucide-react"
+import {
+  BarChart3,
+  CheckCheck,
+  FileClock,
+  ListTodo,
+  LogOut,
+  TimerOff,
+} from "lucide-react"
 import Link from "next/link"
 import {
   Sheet,
@@ -95,6 +102,16 @@ export function Menu({ session }: Props) {
               size="16"
             />{" "}
             Expired
+          </Link>
+
+          <Link
+            href="/stats"
+            scroll={false}
+            onClick={close}
+            className="flex gap-2 items-center"
+          >
+            <BarChart3 className="text-red-600 dark:text-red-400" size="16" />{" "}
+            Stats
           </Link>
 
           <Button className="flex gap-2 items-center mt-5" onClick={logout}>
