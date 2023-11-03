@@ -97,6 +97,7 @@ export async function resetTimer(id: string) {
 
   revalidatePath("/")
 }
+
 export async function changeToLater(id: string) {
   const session = await getServerSession(authOptions)
 
@@ -347,10 +348,18 @@ export async function getStats() {
   const activeCount = await prisma.todo.count({
     where: {
       userId: session.user.id,
-      createdAt: { gte: expired },
+      createdAt: { gte: expired, lte: new Date() },
       completedAt: null,
     },
   })
 
-  return { somedayCount, completedCount, expiredCount, activeCount }
+  const laterCount = await prisma.todo.count({
+    where: {
+      userId: session.user.id,
+      createdAt: { gte: new Date() },
+      completedAt: null,
+    },
+  })
+
+  return { somedayCount, completedCount, expiredCount, activeCount, laterCount }
 }

@@ -10,8 +10,13 @@ import {
 import Link from "next/link"
 
 export default async function Home() {
-  const { somedayCount, expiredCount, completedCount, activeCount } =
-    await getStats()
+  const {
+    somedayCount,
+    expiredCount,
+    completedCount,
+    activeCount,
+    laterCount,
+  } = await getStats()
 
   return (
     <main className="grid gap-4 fixed p-4 bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-lg">
@@ -32,7 +37,7 @@ export default async function Home() {
           strokeWidth="2.5"
         />{" "}
         Total for later:
-        <span className="ml-auto">{activeCount}</span>
+        <span className="ml-auto">{laterCount}</span>
       </Link>
       <Separator />
       <Link
