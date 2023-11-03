@@ -22,13 +22,13 @@ import {
 
 interface TodosContext {
   items: Todo[]
-  add: (data: FormData, backlog: boolean) => Promise<void>
+  add: (data: FormData, someday: boolean) => Promise<void>
   complete: (event: MouseEvent<HTMLButtonElement>) => Promise<void>
   undoComplete: (id: string) => Promise<void>
   remove: (id: string) => Promise<void>
   reset: (id: string) => Promise<void>
   edit: (id: string, data: FormData) => Promise<void>
-  moveToBacklog: (id: string) => Promise<void>
+  moveToSomeday: (id: string) => Promise<void>
 }
 
 const todosContext = createContext<TodosContext | undefined>(undefined)
@@ -76,7 +76,7 @@ function reducer(state: Todo[], action: Action): Todo[] {
 
         return item
       })
-    case "move_to_backlog":
+    case "move_to_someday":
       return state.map((item) => {
         if (item.id === action.payload.id) {
           item.createdAt = null
@@ -98,17 +98,17 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
   const [items, addOptimisticItems] = useOptimistic(initialItems, reducer)
 
   const add = useCallback(
-    async (data: FormData, backlog: boolean) => {
+    async (data: FormData, someday: boolean) => {
       try {
         addOptimisticItems({
           type: "add_todo",
           payload: {
             id: crypto.randomUUID(),
             text: data.get("text"),
-            createdAt: backlog ? null : new Date(),
+            createdAt: someday ? null : new Date(),
           },
         })
-        await addTodo(data, backlog)
+        await addTodo(data, someday)
       } catch {}
     },
     [addOptimisticItems]
@@ -181,11 +181,11 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
     [addOptimisticItems]
   )
 
-  const moveToBacklog = useCallback(
+  const moveToSomeday = useCallback(
     async (id: string) => {
       try {
         addOptimisticItems({
-          type: "move_to_backlog",
+          type: "move_to_someday",
           payload: { id },
         })
         await removeCreatedAt(id)
@@ -203,9 +203,9 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
       remove,
       reset,
       edit,
-      moveToBacklog,
+      moveToSomeday,
     }),
-    [add, complete, items, remove, reset, undoComplete, edit, moveToBacklog]
+    [add, complete, items, remove, reset, undoComplete, edit, moveToSomeday]
   )
 
   return <todosContext.Provider value={value}>{children}</todosContext.Provider>

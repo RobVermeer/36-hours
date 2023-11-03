@@ -4,7 +4,7 @@ import { CheckCheck, FileClock, ListTodo, TimerOff } from "lucide-react"
 import Link from "next/link"
 
 export default async function Home() {
-  const { backlogCount, expiredCount, completedCount, activeCount } =
+  const { somedayCount, expiredCount, completedCount, activeCount } =
     await getStats()
 
   return (
@@ -15,12 +15,12 @@ export default async function Home() {
       </Link>
       <Separator />
       <Link
-        href="/backlog"
+        href="/someday"
         scroll={false}
         className="flex gap-2 items-center text-lg"
       >
-        <FileClock className="text-slate-400" size="20" /> Total items on
-        backlog: <span className="ml-auto text-slate-400">{backlogCount}</span>
+        <FileClock className="text-slate-400" size="20" /> Total for someday:
+        <span className="ml-auto text-slate-400">{somedayCount}</span>
       </Link>
       <Separator />
       <Link

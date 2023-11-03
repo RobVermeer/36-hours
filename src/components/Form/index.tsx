@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation"
 import { useTodos } from "@/context/todos"
 
 interface Props {
-  backlog?: boolean
+  someday?: boolean
 }
 
-export const Form = ({ backlog = false }: Props) => {
+export const Form = ({ someday = false }: Props) => {
   const { add } = useTodos()
   const formRef = useRef<HTMLFormElement>(null)
   const { replace } = useRouter()
@@ -49,7 +49,7 @@ export const Form = ({ backlog = false }: Props) => {
   async function handleSubmit(data: FormData) {
     if (!formRef.current) return
 
-    add(data, backlog)
+    add(data, someday)
     formRef.current.reset()
   }
 

@@ -70,12 +70,12 @@ export function Menu({ session }: Props) {
           </Link>
 
           <Link
-            href="/backlog"
+            href="/someday"
             scroll={false}
             onClick={close}
             className="flex gap-2 items-center"
           >
-            <FileClock className="text-slate-400" size="16" /> Backlog
+            <FileClock className="text-slate-400" size="16" /> Someday
           </Link>
 
           <Link

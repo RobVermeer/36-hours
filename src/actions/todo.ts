@@ -6,7 +6,7 @@ import { Todo } from "@prisma/client"
 import { getServerSession } from "next-auth"
 import { revalidatePath } from "next/cache"
 
-export async function addTodo(data: FormData, backlog: boolean) {
+export async function addTodo(data: FormData, someday: boolean) {
   const text = data.get("text")?.toString()
 
   if (!text) return
@@ -21,7 +21,7 @@ export async function addTodo(data: FormData, backlog: boolean) {
     data: {
       userId: session.user.id,
       text,
-      createdAt: backlog ? null : new Date(),
+      createdAt: someday ? null : new Date(),
     },
   })
 
@@ -223,7 +223,7 @@ export async function getCompletedTodoItems(): Promise<Todo[]> {
   return data
 }
 
-export async function getBacklogTodoItems(): Promise<Todo[]> {
+export async function getSomedayTodoItems(): Promise<Todo[]> {
   const session = await getServerSession(authOptions)
 
   if (!session) {
@@ -247,7 +247,7 @@ export async function getStats() {
     throw new Error("Not logged in")
   }
 
-  const backlogCount = await prisma.todo.count({
+  const somedayCount = await prisma.todo.count({
     where: {
       userId: session.user.id,
       createdAt: null,
@@ -283,5 +283,5 @@ export async function getStats() {
     },
   })
 
-  return { backlogCount, completedCount, expiredCount, activeCount }
+  return { somedayCount, completedCount, expiredCount, activeCount }
 }

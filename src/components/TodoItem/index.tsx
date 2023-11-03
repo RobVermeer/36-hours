@@ -31,7 +31,7 @@ interface Props {
 }
 
 export function TodoItem({ id, text, completedAt, createdAt }: Props) {
-  const { remove, undoComplete, reset, complete, moveToBacklog } = useTodos()
+  const { remove, undoComplete, reset, complete, moveToSomeday } = useTodos()
   const [open, setOpen] = useState(false)
   const completed = Boolean(completedAt)
   const hours = createdAt
@@ -155,14 +155,14 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
           )}
           {!completed && Boolean(createdAt) && (
             <ContextMenuItem
-              onClick={() => moveToBacklog(id)}
+              onClick={() => moveToSomeday(id)}
               className="flex gap-2"
             >
               <ClipboardSignature
                 size="16"
                 className="text-slate-600 dark:text-slate-400"
               />
-              Move to backlog
+              Move to someday
             </ContextMenuItem>
           )}
         </ContextMenuContent>
