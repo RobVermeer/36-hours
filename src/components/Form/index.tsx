@@ -1,6 +1,6 @@
 "use client"
 
-import { refresh } from "@/actions/todo"
+import { Status, refresh } from "@/actions/todo"
 import { useEffect, useRef } from "react"
 import { AddTodo } from "@/components/AddTodo"
 import { List } from "@/components/List"
@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation"
 import { useTodos } from "@/context/todos"
 
 interface Props {
-  someday?: boolean
+  status?: Status
 }
 
-export const Form = ({ someday = false }: Props) => {
+export const Form = ({ status = "now" }: Props) => {
   const { add } = useTodos()
   const formRef = useRef<HTMLFormElement>(null)
   const { replace } = useRouter()
@@ -49,7 +49,7 @@ export const Form = ({ someday = false }: Props) => {
   async function handleSubmit(data: FormData) {
     if (!formRef.current) return
 
-    add(data, someday)
+    add(data, status)
     formRef.current.reset()
   }
 

@@ -11,14 +11,14 @@ export function Logo({ className = "text-white", onClick }: Props) {
   return (
     <Link
       href="/"
-      className={cn(className, "text-xl leading-none flex items-center ")}
+      className={cn(className, "text-2xl leading-none flex items-center ")}
       scroll={false}
       onClick={onClick}
     >
       36 h
       <Clock5
-        size="12"
-        strokeWidth="3.3"
+        size="17"
+        strokeWidth="3"
         className="text-green-400 mx-px relative top-[2px]"
       />
       urs

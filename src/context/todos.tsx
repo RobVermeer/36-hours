@@ -1,7 +1,9 @@
 "use client"
 
 import {
+  Status,
   addTodo,
+  changeToLater,
   completeTodo,
   deleteTodo,
   editTodo,
@@ -22,13 +24,14 @@ import {
 
 interface TodosContext {
   items: Todo[]
-  add: (data: FormData, someday: boolean) => Promise<void>
+  add: (data: FormData, status: Status) => Promise<void>
   complete: (event: MouseEvent<HTMLButtonElement>) => Promise<void>
   undoComplete: (id: string) => Promise<void>
   remove: (id: string) => Promise<void>
   reset: (id: string) => Promise<void>
   edit: (id: string, data: FormData) => Promise<void>
   moveToSomeday: (id: string) => Promise<void>
+  moveToLater: (id: string) => Promise<void>
 }
 
 const todosContext = createContext<TodosContext | undefined>(undefined)
@@ -76,6 +79,16 @@ function reducer(state: Todo[], action: Action): Todo[] {
 
         return item
       })
+    case "move_to_later":
+      return state.map((item) => {
+        if (item.id === action.payload.id) {
+          const someday = new Date()
+          someday.setDate(someday.getDate() + 7)
+          item.createdAt = someday
+        }
+
+        return item
+      })
     case "move_to_someday":
       return state.map((item) => {
         if (item.id === action.payload.id) {
@@ -98,17 +111,28 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
   const [items, addOptimisticItems] = useOptimistic(initialItems, reducer)
 
   const add = useCallback(
-    async (data: FormData, someday: boolean) => {
+    async (data: FormData, status: Status) => {
       try {
+        let createdAt: Date | null = new Date()
+
+        switch (status) {
+          case "someday":
+            createdAt = null
+            break
+          case "later":
+            createdAt.setDate(createdAt.getDate() + 7)
+            break
+        }
+
         addOptimisticItems({
           type: "add_todo",
           payload: {
             id: crypto.randomUUID(),
             text: data.get("text"),
-            createdAt: someday ? null : new Date(),
+            createdAt,
           },
         })
-        await addTodo(data, someday)
+        await addTodo(data, status)
       } catch {}
     },
     [addOptimisticItems]
@@ -181,6 +205,19 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
     [addOptimisticItems]
   )
 
+  const moveToLater = useCallback(
+    async (id: string) => {
+      try {
+        addOptimisticItems({
+          type: "move_to_later",
+          payload: { id },
+        })
+        await changeToLater(id)
+      } catch {}
+    },
+    [addOptimisticItems]
+  )
+
   const moveToSomeday = useCallback(
     async (id: string) => {
       try {
@@ -204,8 +241,19 @@ export const TodosProvider = ({ children, initialItems }: Props) => {
       reset,
       edit,
       moveToSomeday,
+      moveToLater,
     }),
-    [add, complete, items, remove, reset, undoComplete, edit, moveToSomeday]
+    [
+      add,
+      complete,
+      items,
+      remove,
+      reset,
+      undoComplete,
+      edit,
+      moveToSomeday,
+      moveToLater,
+    ]
   )
 
   return <todosContext.Provider value={value}>{children}</todosContext.Provider>

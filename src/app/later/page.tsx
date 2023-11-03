@@ -1,13 +1,13 @@
 import { Form } from "@/components/Form"
-import { getSomedayTodoItems } from "@/actions/todo"
+import { getLaterTodoItems } from "@/actions/todo"
 import { TodosProvider } from "@/context/todos"
 
 export default async function Home() {
-  const data = await getSomedayTodoItems()
+  const data = await getLaterTodoItems()
 
   return (
     <TodosProvider initialItems={data}>
-      <Form status="someday" />
+      <Form status="later" />
     </TodosProvider>
   )
 }

@@ -6,7 +6,9 @@ import { Todo } from "@prisma/client"
 import { getServerSession } from "next-auth"
 import { revalidatePath } from "next/cache"
 
-export async function addTodo(data: FormData, someday: boolean) {
+export type Status = "now" | "later" | "someday"
+
+export async function addTodo(data: FormData, status: Status = "now") {
   const text = data.get("text")?.toString()
 
   if (!text) return
@@ -17,11 +19,22 @@ export async function addTodo(data: FormData, someday: boolean) {
     throw new Error("Not logged in")
   }
 
+  let createdAt: Date | null = new Date()
+
+  switch (status) {
+    case "someday":
+      createdAt = null
+      break
+    case "later":
+      createdAt.setDate(createdAt.getDate() + 7)
+      break
+  }
+
   await prisma.todo.create({
     data: {
       userId: session.user.id,
       text,
-      createdAt: someday ? null : new Date(),
+      createdAt,
     },
   })
 
@@ -76,6 +89,27 @@ export async function resetTimer(id: string) {
   await prisma.todo.update({
     data: {
       createdAt: new Date(),
+    },
+    where: {
+      id,
+    },
+  })
+
+  revalidatePath("/")
+}
+export async function changeToLater(id: string) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    throw new Error("Not logged in")
+  }
+
+  const createdAt = new Date()
+  createdAt.setDate(createdAt.getDate() + 7)
+
+  await prisma.todo.update({
+    data: {
+      createdAt,
     },
     where: {
       id,
@@ -160,7 +194,42 @@ export async function getTodoItems(): Promise<Todo[]> {
   const data = await prisma.todo.findMany({
     where: {
       userId: session.user.id,
-      createdAt: { gte: expired },
+      createdAt: { gte: expired, lte: new Date() },
+      AND: [
+        {
+          OR: [
+            { completedAt: null },
+            {
+              completedAt: {
+                gte: expiredCompleted,
+              },
+            },
+          ],
+        },
+      ],
+    },
+  })
+
+  return data
+}
+
+export async function getLaterTodoItems(): Promise<Todo[]> {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    throw new Error("Not logged in")
+  }
+
+  const expiredCompleted = new Date()
+  const expired = new Date()
+
+  expiredCompleted.setHours(expiredCompleted.getHours() - 6)
+  expired.setHours(expired.getHours() - 36)
+
+  const data = await prisma.todo.findMany({
+    where: {
+      userId: session.user.id,
+      createdAt: { gte: new Date() },
       AND: [
         {
           OR: [

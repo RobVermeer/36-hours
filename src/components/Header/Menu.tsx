@@ -5,8 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { signOut } from "next-auth/react"
 import {
   BarChart3,
+  CalendarClock,
+  CalendarDays,
   CheckCheck,
-  FileClock,
   ListTodo,
   LogOut,
   TimerOff,
@@ -22,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/Logo"
 import { useState } from "react"
+import { Separator } from "@/components/ui/separator"
 
 interface Props {
   session: Session
@@ -66,7 +68,22 @@ export function Menu({ session }: Props) {
             onClick={close}
             className="flex gap-2 items-center mt-4"
           >
-            <ListTodo size="16" /> Todo
+            <ListTodo className="text-green-400" size="18" strokeWidth="2.5" />{" "}
+            Todo
+          </Link>
+
+          <Link
+            href="/later"
+            scroll={false}
+            onClick={close}
+            className="flex gap-2 items-center"
+          >
+            <CalendarClock
+              className="text-indigo-400"
+              size="18"
+              strokeWidth="2.5"
+            />{" "}
+            Later
           </Link>
 
           <Link
@@ -75,8 +92,15 @@ export function Menu({ session }: Props) {
             onClick={close}
             className="flex gap-2 items-center"
           >
-            <FileClock className="text-slate-400" size="16" /> Someday
+            <CalendarDays
+              className="text-zinc-400"
+              size="18"
+              strokeWidth="2.5"
+            />{" "}
+            Someday
           </Link>
+
+          <Separator />
 
           <Link
             href="/completed"
@@ -85,8 +109,9 @@ export function Menu({ session }: Props) {
             className="flex gap-2 items-center"
           >
             <CheckCheck
-              className="text-green-600 dark:text-green-400"
-              size="16"
+              className="text-green-600"
+              size="18"
+              strokeWidth="2.5"
             />{" "}
             Completed
           </Link>
@@ -99,7 +124,8 @@ export function Menu({ session }: Props) {
           >
             <TimerOff
               className="text-yellow-600 dark:text-yellow-400"
-              size="16"
+              size="18"
+              strokeWidth="2.5"
             />{" "}
             Expired
           </Link>
@@ -110,7 +136,11 @@ export function Menu({ session }: Props) {
             onClick={close}
             className="flex gap-2 items-center"
           >
-            <BarChart3 className="text-red-600 dark:text-red-400" size="16" />{" "}
+            <BarChart3
+              className="text-red-600 dark:text-red-400"
+              size="18"
+              strokeWidth="2.5"
+            />{" "}
             Stats
           </Link>
 

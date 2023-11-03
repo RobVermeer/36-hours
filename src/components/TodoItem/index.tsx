@@ -2,7 +2,8 @@ import { cn } from "@/lib/utils"
 import { useMemo, useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
-  ClipboardSignature,
+  CalendarClock,
+  CalendarDays,
   Clock11,
   Clock2,
   Clock5,
@@ -31,11 +32,12 @@ interface Props {
 }
 
 export function TodoItem({ id, text, completedAt, createdAt }: Props) {
-  const { remove, undoComplete, reset, complete, moveToSomeday } = useTodos()
+  const { remove, undoComplete, reset, complete, moveToSomeday, moveToLater } =
+    useTodos()
   const [open, setOpen] = useState(false)
   const completed = Boolean(completedAt)
   const hours = createdAt
-    ? Math.ceil(Math.abs(new Date().getTime() - createdAt.getTime()) / 36e5)
+    ? Math.ceil((new Date().getTime() - createdAt.getTime()) / 36e5)
     : 0
   const className = completed
     ? "opacity-40 bg-slate-200 dark:bg-slate-800"
@@ -44,7 +46,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
   const icon = useMemo(() => {
     if (!createdAt) {
       return (
-        <ClipboardSignature
+        <CalendarDays
           size="20"
           className="shrink-0 text-slate-600 dark:text-slate-400 ml-auto"
         />
@@ -57,6 +59,12 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
           size="20"
           className="shrink-0 text-slate-600 dark:text-slate-400 ml-auto"
         />
+      )
+    }
+
+    if (hours < 0) {
+      return (
+        <CalendarClock size="20" className="shrink-0 text-indigo-400 ml-auto" />
       )
     }
 
@@ -150,7 +158,16 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
                 size="16"
                 className="text-green-600 dark:text-green-400"
               />
-              Reset timer
+              Do it in 36 hours
+            </ContextMenuItem>
+          )}
+          {!completed && (
+            <ContextMenuItem
+              onClick={() => moveToLater(id)}
+              className="flex gap-2"
+            >
+              <CalendarClock size="16" className="text-indigo-400" />
+              Do it later
             </ContextMenuItem>
           )}
           {!completed && Boolean(createdAt) && (
@@ -158,11 +175,11 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
               onClick={() => moveToSomeday(id)}
               className="flex gap-2"
             >
-              <ClipboardSignature
+              <CalendarDays
                 size="16"
                 className="text-slate-600 dark:text-slate-400"
               />
-              Move to someday
+              Do it someday
             </ContextMenuItem>
           )}
         </ContextMenuContent>
