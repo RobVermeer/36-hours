@@ -15,7 +15,7 @@ import { Todo } from "@prisma/client"
 import {
   ReactNode,
   createContext,
-  experimental_useOptimistic as useOptimistic,
+  useOptimistic,
   useContext,
   MouseEvent,
   useMemo,

@@ -1,6 +1,6 @@
 "use server"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/lib/nextAuth"
 import { prisma } from "@/lib/prisma"
 import { Todo } from "@prisma/client"
 import { getServerSession } from "next-auth"
