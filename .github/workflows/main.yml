@@ -16,19 +16,15 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
+            ~/.npm
             ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/bun.lockb') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          key: ${{ runner.os }}-next-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/bun.lockb') }}-
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
+            ${{ runner.os }}-next-${{ hashFiles('**/package-lock.json') }}-
       - name: Install dependencies ⏳
-        run: bun install --frozen-lockfile
-      - name: Generate Prisma files 🪢
-        run: bun run prisma generate
+        run: npm ci
       - name: Build website 👷‍♀️
-        run: bun run build
+        run: npm run build
       - name: Copy prisma folder 💾
         run: cp -R prisma/ .next/standalone/prisma/
       - name: Copy public folder 🚝
