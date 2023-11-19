@@ -47,7 +47,7 @@ export function Menu({ session }: Props) {
 
   return (
     <div className="flex gap-2">
-      <Link href="/stats">
+      <Link href="/stats" scroll={false}>
         <Avatar className="border border-slate-500 cursor-pointer">
           <AvatarImage src={session.user.image} alt={`@${session.user.name}`} />
           <AvatarFallback>{initials}</AvatarFallback>
