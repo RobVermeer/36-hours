@@ -62,7 +62,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
       )
     }
 
-    if (hours <= 0) {
+    if (hours < 0) {
       return (
         <CalendarClock size="20" className="shrink-0 text-indigo-400 ml-auto" />
       )
