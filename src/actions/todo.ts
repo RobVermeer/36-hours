@@ -209,6 +209,9 @@ export async function getTodoItems(): Promise<Todo[]> {
         },
       ],
     },
+    orderBy: {
+      createdAt: "asc",
+    },
   })
 
   return data
@@ -244,6 +247,9 @@ export async function getLaterTodoItems(): Promise<Todo[]> {
         },
       ],
     },
+    orderBy: {
+      createdAt: "asc",
+    },
   })
 
   return data
@@ -265,6 +271,9 @@ export async function getExpiredTodoItems(): Promise<Todo[]> {
       userId: session.user.id,
       createdAt: { lte: expired },
       completedAt: null,
+    },
+    orderBy: {
+      createdAt: "asc",
     },
   })
 
