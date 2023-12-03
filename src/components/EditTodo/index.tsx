@@ -34,7 +34,7 @@ export function EditTodo({ id, text, open, close }: Props) {
   }
 
   return (
-    <DialogContent>
+    <DialogContent onOpenAutoFocus={(event) => event.preventDefault()}>
       <form ref={formRef} action={handleSubmit}>
         <DialogHeader>
           <DialogTitle className="flex gap-2 items-center">
