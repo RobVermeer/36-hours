@@ -167,7 +167,11 @@ export function Menu({ session }: Props) {
               Wishlist
             </a>
 
-            <Button className="flex gap-2 items-center mt-5" onClick={logout}>
+            <Button
+              variant="secondary"
+              className="flex gap-2 items-center mt-5"
+              onClick={logout}
+            >
               <LogOut className="text-red-500 dark:text-red-400" size="16" />{" "}
               Logout
             </Button>

@@ -60,7 +60,7 @@ export const Form = ({ status = "now" }: Props) => {
       <form
         ref={formRef}
         action={handleSubmit}
-        className="bg-white dark:bg-slate-900 flex gap-2 fixed p-4 bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-lg"
+        className="flex gap-2 fixed p-4 bottom-0 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-lg"
       >
         <Input name="text" required />
         <AddTodo />

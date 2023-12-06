@@ -8,6 +8,7 @@ import {
   Clock2,
   Clock5,
   History,
+  Link as LinkIcon,
   PartyPopper,
   PenSquare,
   TimerOff,
@@ -23,15 +24,17 @@ import {
 import { EditTodo } from "@/components/EditTodo"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { useTodos } from "@/context/todos"
+import { Separator } from "@/components/ui/separator"
 
 interface Props {
   id: string
   text: string
+  url: string | null
   completedAt: Date | null
   createdAt: Date | null
 }
 
-export function TodoItem({ id, text, completedAt, createdAt }: Props) {
+export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
   const { remove, undoComplete, reset, complete, moveToSomeday, moveToLater } =
     useTodos()
   const [open, setOpen] = useState(false)
@@ -120,11 +123,28 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
               onClick={complete}
               disabled={completed || !createdAt}
             />
-            {text}
+            <span className="flex items-center gap-2">
+              {url && <LinkIcon size="14" />}
+              {text}
+            </span>
             {icon}
           </label>
         </ContextMenuTrigger>
         <ContextMenuContent>
+          {url && (
+            <>
+              <ContextMenuItem className="flex gap-2" asChild>
+                <a href={url} target="_blank">
+                  <LinkIcon
+                    size="16"
+                    className="text-pink-600 dark:text-pink-400"
+                  />
+                  Visit link
+                </a>
+              </ContextMenuItem>
+              <Separator />
+            </>
+          )}
           <ContextMenuItem onClick={() => remove(id)} className="flex gap-2">
             <Trash2 size="16" className="text-red-600 dark:text-red-400" />
             Remove todo
@@ -152,6 +172,7 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
               </ContextMenuItem>
             </DialogTrigger>
           )}
+          <Separator />
           {!completed && (
             <ContextMenuItem onClick={() => reset(id)} className="flex gap-2">
               <History
@@ -185,7 +206,13 @@ export function TodoItem({ id, text, completedAt, createdAt }: Props) {
         </ContextMenuContent>
       </ContextMenu>
 
-      <EditTodo id={id} text={text} open={open} close={() => setOpen(false)} />
+      <EditTodo
+        id={id}
+        text={text}
+        url={url}
+        open={open}
+        close={() => setOpen(false)}
+      />
     </Dialog>
   )
 }

@@ -16,11 +16,12 @@ export const List = () => {
             />
           </div>
         )}
-        {items.map(({ id, text, completedAt, createdAt }) => (
+        {items.map(({ id, text, url, completedAt, createdAt }) => (
           <TodoItem
             key={id}
             id={id}
             text={text}
+            url={url}
             completedAt={completedAt}
             createdAt={createdAt}
           />

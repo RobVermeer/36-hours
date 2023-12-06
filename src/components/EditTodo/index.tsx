@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   DialogContent,
@@ -9,22 +9,25 @@ import {
 import { Input } from "@/components/ui/input"
 import { PenSquare } from "lucide-react"
 import { useTodos } from "@/context/todos"
+import { Label } from "../ui/label"
 
 interface Props {
   id: string
   text: string
+  url: string | null
   open: boolean
   close: () => void
 }
 
-export function EditTodo({ id, text, open, close }: Props) {
+export function EditTodo({ id, text, url, open, close }: Props) {
   const [newText, setNewText] = useState(text)
+  const [newUrl, setNewUrl] = useState(url || "")
   const { edit } = useTodos()
-  const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
     setNewText(text)
-  }, [open, text])
+    setNewUrl(url || "")
+  }, [open, text, url])
 
   async function handleSubmit(data: FormData) {
     try {
@@ -35,22 +38,36 @@ export function EditTodo({ id, text, open, close }: Props) {
 
   return (
     <DialogContent onOpenAutoFocus={(event) => event.preventDefault()}>
-      <form ref={formRef} action={handleSubmit}>
+      <form action={handleSubmit}>
         <DialogHeader>
           <DialogTitle className="flex gap-2 items-center">
             <PenSquare size="16" />
             Edit todo
           </DialogTitle>
-          <DialogDescription>
-            <Input
-              required
-              className="mt-4"
-              value={newText}
-              name="newText"
-              onChange={(event) => setNewText(event.currentTarget.value)}
-            />
+          <DialogDescription className="text-primary">
+            <div className="grid gap-3 mt-4">
+              <Label htmlFor="text">Todo</Label>
+              <Input
+                id="text"
+                required
+                value={newText}
+                name="newText"
+                onChange={(event) => setNewText(event.currentTarget.value)}
+              />
+              <Label htmlFor="url">URL</Label>
+              <Input
+                id="url"
+                type="url"
+                placeholder="https://36.robvermeer.nl"
+                value={newUrl}
+                name="newUrl"
+                onChange={(event) => setNewUrl(event.currentTarget.value)}
+              />
+            </div>
 
-            <Button className="w-full mt-4">Save</Button>
+            <Button className="w-full mt-4" variant="secondary">
+              Save
+            </Button>
           </DialogDescription>
         </DialogHeader>
       </form>

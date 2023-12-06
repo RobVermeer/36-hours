@@ -6,7 +6,12 @@ export const AddTodo = () => {
   const { pending } = useFormStatus()
 
   return (
-    <Button className="shrink-0" disabled={pending} size="icon">
+    <Button
+      variant="secondary"
+      className="shrink-0"
+      disabled={pending}
+      size="icon"
+    >
       <Plus size="20" />
     </Button>
   )

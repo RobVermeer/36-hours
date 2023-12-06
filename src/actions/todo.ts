@@ -141,6 +141,7 @@ export async function removeCreatedAt(id: string) {
 
 export async function editTodo(id: string, data: FormData) {
   const text = data.get("newText")?.toString()
+  const url = data.get("newUrl")?.toString()
   const session = await getServerSession(authOptions)
 
   if (!session) {
@@ -150,6 +151,7 @@ export async function editTodo(id: string, data: FormData) {
   await prisma.todo.update({
     data: {
       text,
+      url,
     },
     where: {
       id,

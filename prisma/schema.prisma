@@ -63,5 +63,6 @@ model Todo {
   createdAt   DateTime?
   completedAt DateTime?
   deletedAt   DateTime?
+  url         String?
   user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
