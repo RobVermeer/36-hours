@@ -45,7 +45,7 @@ export function EditTodo({ id, text, url, open, close }: Props) {
             Edit todo
           </DialogTitle>
           <DialogDescription className="text-primary">
-            <div className="grid gap-3 mt-4">
+            <div className="grid gap-3 mt-4 text-left">
               <Label htmlFor="text">Todo</Label>
               <Input
                 id="text"
