@@ -15,16 +15,11 @@ import {
   Trash2,
   Undo2,
 } from "lucide-react"
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu"
 import { EditTodo } from "@/components/EditTodo"
-import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog } from "@/components/ui/dialog"
 import { useTodos } from "@/context/todos"
-import { Separator } from "@/components/ui/separator"
+import { Drawer, DrawerContent } from "@/components/ui/drawer"
+import { Button } from "@/components/ui/button"
 
 interface Props {
   id: string
@@ -37,7 +32,8 @@ interface Props {
 export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
   const { remove, undoComplete, reset, complete, moveToSomeday, moveToLater } =
     useTodos()
-  const [open, setOpen] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(false)
   const completed = Boolean(completedAt)
   const hours = createdAt
     ? Math.ceil((new Date().getTime() - createdAt.getTime()) / 36e5)
@@ -107,111 +103,133 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
   }, [completed, hours, createdAt])
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <ContextMenu>
-        <ContextMenuTrigger>
-          <label
-            className={cn(
-              "select-none flex gap-2 items-center rounded-md p-2 border",
-              className
-            )}
-          >
-            <Checkbox
-              className="dark:border-slate-600"
-              value={id}
-              checked={completed}
-              onClick={complete}
-              disabled={completed || !createdAt}
-            />
-            <span className="flex items-center gap-2">
-              {url && <LinkIcon size="14" />}
-              {text}
-            </span>
-            {icon}
-          </label>
-        </ContextMenuTrigger>
-        <ContextMenuContent>
-          {url && (
-            <>
-              <ContextMenuItem className="flex gap-2" asChild>
-                <a href={url} target="_blank">
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+      <Drawer open={openDrawer} onOpenChange={setOpenDrawer}>
+        <label
+          className={cn(
+            "select-none flex gap-2 items-center rounded-md p-2 border",
+            className
+          )}
+          onContextMenu={(event) => {
+            event.preventDefault()
+            setOpenDrawer(true)
+          }}
+        >
+          <Checkbox
+            className="dark:border-slate-600"
+            value={id}
+            checked={completed}
+            onClick={complete}
+            disabled={completed || !createdAt}
+          />
+          <span className="flex items-center gap-2">
+            {url && <LinkIcon size="14" />}
+            {text}
+          </span>
+          {icon}
+        </label>
+        <DrawerContent>
+          <div className="grid gap-2 w-full max-w-xs mx-auto my-4">
+            {url && (
+              <Button variant="secondary" asChild className="flex gap-2">
+                <a href={url} target="_blank" className="flex gap-2">
                   <LinkIcon
                     size="16"
                     className="text-pink-600 dark:text-pink-400"
                   />
                   Visit link
                 </a>
-              </ContextMenuItem>
-              <Separator />
-            </>
-          )}
-          <ContextMenuItem onClick={() => remove(id)} className="flex gap-2">
-            <Trash2 size="16" className="text-red-600 dark:text-red-400" />
-            Remove todo
-          </ContextMenuItem>
-          {completed && (
-            <ContextMenuItem
-              onClick={() => undoComplete(id)}
+              </Button>
+            )}
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => remove(id)}
               className="flex gap-2"
             >
-              <Undo2
-                size="16"
-                className="text-yellow-600 dark:text-yellow-400"
-              />
-              Undo completed
-            </ContextMenuItem>
-          )}
-          {!completed && (
-            <DialogTrigger asChild>
-              <ContextMenuItem className="flex gap-2">
+              <Trash2 size="16" className="text-red-600 dark:text-red-400" />
+              Remove todo
+            </Button>
+            {completed && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => undoComplete(id)}
+                className="flex gap-2"
+              >
+                <Undo2
+                  size="16"
+                  className="text-yellow-600 dark:text-yellow-400"
+                />
+                Undo completed
+              </Button>
+            )}
+            {!completed && (
+              <Button
+                type="button"
+                variant="secondary"
+                className="flex gap-2"
+                onClick={() => {
+                  setOpenDrawer(false)
+                  setOpenDialog(true)
+                }}
+              >
                 <PenSquare
                   size="16"
                   className="text-yellow-600 dark:text-yellow-400"
                 />
                 Edit todo
-              </ContextMenuItem>
-            </DialogTrigger>
-          )}
-          <Separator />
-          {!completed && (
-            <ContextMenuItem onClick={() => reset(id)} className="flex gap-2">
-              <History
-                size="16"
-                className="text-green-600 dark:text-green-400"
-              />
-              Do it in 36 hours
-            </ContextMenuItem>
-          )}
-          {!completed && (
-            <ContextMenuItem
-              onClick={() => moveToLater(id)}
-              className="flex gap-2"
-            >
-              <CalendarClock size="16" className="text-indigo-400" />
-              Do it later
-            </ContextMenuItem>
-          )}
-          {!completed && Boolean(createdAt) && (
-            <ContextMenuItem
-              onClick={() => moveToSomeday(id)}
-              className="flex gap-2"
-            >
-              <CalendarDays
-                size="16"
-                className="text-slate-600 dark:text-slate-400"
-              />
-              Do it someday
-            </ContextMenuItem>
-          )}
-        </ContextMenuContent>
-      </ContextMenu>
+              </Button>
+            )}
+            {!completed && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => reset(id)}
+                className="flex gap-2"
+              >
+                <History
+                  size="16"
+                  className="text-green-600 dark:text-green-400"
+                />
+                Do it in 36 hours
+              </Button>
+            )}
+            {!completed && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => moveToLater(id)}
+                className="flex gap-2"
+              >
+                <CalendarClock size="16" className="text-indigo-400" />
+                Do it later
+              </Button>
+            )}
+            {!completed && Boolean(createdAt) && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => moveToSomeday(id)}
+                className="flex gap-2"
+              >
+                <CalendarDays
+                  size="16"
+                  className="text-slate-600 dark:text-slate-400"
+                />
+                Do it someday
+              </Button>
+            )}
+          </div>
+        </DrawerContent>
+      </Drawer>
 
       <EditTodo
         id={id}
         text={text}
         url={url}
-        open={open}
-        close={() => setOpen(false)}
+        open={openDialog}
+        close={() => setOpenDialog(false)}
       />
     </Dialog>
   )

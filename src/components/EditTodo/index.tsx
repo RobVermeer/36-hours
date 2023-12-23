@@ -44,7 +44,7 @@ export function EditTodo({ id, text, url, open, close }: Props) {
             <PenSquare size="16" />
             Edit todo
           </DialogTitle>
-          <DialogDescription className="text-primary">
+          <div className="text-primary">
             <div className="grid gap-3 mt-4 text-left">
               <Label htmlFor="text">Todo</Label>
               <Input
@@ -68,7 +68,7 @@ export function EditTodo({ id, text, url, open, close }: Props) {
             <Button className="w-full mt-4" variant="secondary">
               Save
             </Button>
-          </DialogDescription>
+          </div>
         </DialogHeader>
       </form>
     </DialogContent>
