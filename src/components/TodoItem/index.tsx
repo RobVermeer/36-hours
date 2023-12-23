@@ -128,11 +128,16 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
           </span>
           {icon}
         </label>
-        <DrawerContent>
+        <DrawerContent className="focus-visible:outline-none">
           <div className="grid gap-2 w-full max-w-xs mx-auto my-4">
             {url && (
               <Button variant="secondary" asChild className="flex gap-2">
-                <a href={url} target="_blank" className="flex gap-2">
+                <a
+                  href={url}
+                  target="_blank"
+                  className="flex gap-2"
+                  onClick={() => setOpenDrawer(false)}
+                >
                   <LinkIcon
                     size="16"
                     className="text-pink-600 dark:text-pink-400"
@@ -144,7 +149,10 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
             <Button
               type="button"
               variant="secondary"
-              onClick={() => remove(id)}
+              onClick={() => {
+                setOpenDrawer(false)
+                remove(id)
+              }}
               className="flex gap-2"
             >
               <Trash2 size="16" className="text-red-600 dark:text-red-400" />
@@ -154,7 +162,10 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => undoComplete(id)}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  undoComplete(id)
+                }}
                 className="flex gap-2"
               >
                 <Undo2
@@ -185,7 +196,10 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => reset(id)}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  reset(id)
+                }}
                 className="flex gap-2"
               >
                 <History
@@ -199,7 +213,10 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => moveToLater(id)}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  moveToLater(id)
+                }}
                 className="flex gap-2"
               >
                 <CalendarClock size="16" className="text-indigo-400" />
@@ -210,7 +227,10 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => moveToSomeday(id)}
+                onClick={() => {
+                  setOpenDrawer(false)
+                  moveToSomeday(id)
+                }}
                 className="flex gap-2"
               >
                 <CalendarDays
