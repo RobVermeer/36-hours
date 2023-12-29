@@ -1,5 +1,6 @@
 import { getStats } from "@/actions/todo"
 import { Separator } from "@/components/ui/separator"
+import { authOptions } from "@/lib/nextAuth"
 import {
   CalendarClock,
   CalendarDays,
@@ -7,9 +8,15 @@ import {
   ListTodo,
   TimerOff,
 } from "lucide-react"
+import { getServerSession } from "next-auth"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
-export default async function Home() {
+export default async function Stats() {
+  const session = await getServerSession(authOptions)
+
+  if (!session) redirect(`/login?callbackUrl=${encodeURIComponent("/stats")}`)
+
   const {
     somedayCount,
     expiredCount,
