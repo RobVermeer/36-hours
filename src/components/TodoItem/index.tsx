@@ -29,6 +29,17 @@ import {
   resetTimer,
   undoCompleteTodo,
 } from "@/actions/todo"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog"
 
 interface Props {
   id: string
@@ -182,15 +193,40 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
                 </a>
               </Button>
             )}
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={remove}
-              className="flex gap-2"
-            >
-              <Trash2 size="16" className="text-red-600 dark:text-red-400" />
-              Remove todo
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="flex gap-2"
+                >
+                  <Trash2
+                    size="16"
+                    className="text-red-600 dark:text-red-400"
+                  />
+                  Remove todo
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>You sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your todo item.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction className="flex gap-2" onClick={remove}>
+                    <Trash2
+                      size="16"
+                      className="text-red-600 dark:text-red-400"
+                    />
+                    Remove todo
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             {completed && (
               <Button
                 type="button"
