@@ -176,7 +176,7 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
           {icon}
         </label>
         <DrawerContent className="focus-visible:outline-none">
-          <div className="grid gap-2 w-full max-w-xs mx-auto my-4">
+          <div className="grid gap-2 w-full sm:max-w-xs px-3 mx-auto my-4">
             {url && (
               <Button variant="secondary" asChild className="flex gap-2">
                 <a
