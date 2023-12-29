@@ -1,3 +1,5 @@
+"use client"
+
 import { cn } from "@/lib/utils"
 import { useMemo, useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -17,9 +19,16 @@ import {
 } from "lucide-react"
 import { EditTodo } from "@/components/EditTodo"
 import { Dialog } from "@/components/ui/dialog"
-import { useTodos } from "@/context/todos"
 import { Drawer, DrawerContent } from "@/components/ui/drawer"
 import { Button } from "@/components/ui/button"
+import {
+  changeToLater,
+  completeTodo,
+  deleteTodo,
+  removeCreatedAt,
+  resetTimer,
+  undoCompleteTodo,
+} from "@/actions/todo"
 
 interface Props {
   id: string
@@ -30,8 +39,6 @@ interface Props {
 }
 
 export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
-  const { remove, undoComplete, reset, complete, moveToSomeday, moveToLater } =
-    useTodos()
   const [openDialog, setOpenDialog] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
   const completed = Boolean(completedAt)
@@ -102,6 +109,35 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
     )
   }, [completed, hours, createdAt])
 
+  const remove = async () => {
+    setOpenDrawer(false)
+    await deleteTodo(id)
+  }
+
+  const undoComplete = async () => {
+    setOpenDrawer(false)
+    await undoCompleteTodo(id)
+  }
+
+  const reset = async () => {
+    setOpenDrawer(false)
+    await resetTimer(id)
+  }
+
+  const complete = async () => {
+    await completeTodo(id)
+  }
+
+  const moveToSomeday = async () => {
+    setOpenDrawer(false)
+    await removeCreatedAt(id)
+  }
+
+  const moveToLater = async () => {
+    setOpenDrawer(false)
+    await changeToLater(id)
+  }
+
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <Drawer open={openDrawer} onOpenChange={setOpenDrawer}>
@@ -149,10 +185,7 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
             <Button
               type="button"
               variant="secondary"
-              onClick={() => {
-                setOpenDrawer(false)
-                remove(id)
-              }}
+              onClick={remove}
               className="flex gap-2"
             >
               <Trash2 size="16" className="text-red-600 dark:text-red-400" />
@@ -162,10 +195,7 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => {
-                  setOpenDrawer(false)
-                  undoComplete(id)
-                }}
+                onClick={undoComplete}
                 className="flex gap-2"
               >
                 <Undo2
@@ -196,10 +226,7 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => {
-                  setOpenDrawer(false)
-                  reset(id)
-                }}
+                onClick={reset}
                 className="flex gap-2"
               >
                 <History
@@ -213,10 +240,7 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => {
-                  setOpenDrawer(false)
-                  moveToLater(id)
-                }}
+                onClick={moveToLater}
                 className="flex gap-2"
               >
                 <CalendarClock size="16" className="text-indigo-400" />
@@ -227,10 +251,7 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => {
-                  setOpenDrawer(false)
-                  moveToSomeday(id)
-                }}
+                onClick={moveToSomeday}
                 className="flex gap-2"
               >
                 <CalendarDays

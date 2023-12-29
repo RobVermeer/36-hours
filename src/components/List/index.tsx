@@ -1,10 +1,12 @@
 import { TodoItem } from "@/components/TodoItem"
 import { Rocket } from "lucide-react"
-import { useTodos } from "@/context/todos"
+import { getTodoItems } from "@/actions/todo"
 
-export const List = () => {
-  const { items } = useTodos()
+interface Props {
+  items: Awaited<ReturnType<typeof getTodoItems>>
+}
 
+export const List = ({ items }: Props) => {
   return (
     <div className="flex flex-col-reverse fixed p-4 top-64 bottom-14 left-0 right-0 overflow-auto md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-lg">
       <div className="flex flex-col justify-end gap-2">

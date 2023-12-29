@@ -1,9 +1,7 @@
 import "./globals.css"
 import type { Metadata } from "next"
 import { headers } from "next/headers"
-import { getServerSession } from "next-auth"
 import { Ubuntu } from "next/font/google"
-import { authOptions } from "@/lib/nextAuth"
 import { Header } from "@/components/Header"
 
 const ubuntu = Ubuntu({ weight: ["400"], subsets: ["latin"] })

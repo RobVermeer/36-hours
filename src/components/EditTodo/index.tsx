@@ -2,14 +2,13 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { PenSquare } from "lucide-react"
-import { useTodos } from "@/context/todos"
-import { Label } from "../ui/label"
+import { Label } from "@/components/ui/label"
+import { editTodo } from "@/actions/todo"
 
 interface Props {
   id: string
@@ -22,7 +21,6 @@ interface Props {
 export function EditTodo({ id, text, url, open, close }: Props) {
   const [newText, setNewText] = useState(text)
   const [newUrl, setNewUrl] = useState(url || "")
-  const { edit } = useTodos()
 
   useEffect(() => {
     setNewText(text)
@@ -31,7 +29,7 @@ export function EditTodo({ id, text, url, open, close }: Props) {
 
   async function handleSubmit(data: FormData) {
     try {
-      await edit(id, data)
+      await editTodo(id, data)
       close()
     } catch {}
   }

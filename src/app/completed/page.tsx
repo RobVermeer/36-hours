@@ -1,9 +1,9 @@
 import { Form } from "@/components/Form"
 import { getCompletedTodoItems } from "@/actions/todo"
-import { TodosProvider } from "@/context/todos"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/nextAuth"
 import { redirect } from "next/navigation"
+import { List } from "@/components/List"
 
 export default async function Completed() {
   const session = await getServerSession(authOptions)
@@ -14,8 +14,9 @@ export default async function Completed() {
   const data = await getCompletedTodoItems()
 
   return (
-    <TodosProvider initialItems={data}>
+    <>
+      <List items={data} />
       <Form />
-    </TodosProvider>
+    </>
   )
 }

@@ -1,9 +1,9 @@
 import { Form } from "@/components/Form"
 import { getLaterTodoItems } from "@/actions/todo"
-import { TodosProvider } from "@/context/todos"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/nextAuth"
 import { redirect } from "next/navigation"
+import { List } from "@/components/List"
 
 export default async function Later() {
   const session = await getServerSession(authOptions)
@@ -13,8 +13,9 @@ export default async function Later() {
   const data = await getLaterTodoItems()
 
   return (
-    <TodosProvider initialItems={data}>
+    <>
+      <List items={data} />
       <Form status="later" />
-    </TodosProvider>
+    </>
   )
 }
