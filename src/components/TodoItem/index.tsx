@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { useMemo, useState } from "react"
+import { TouchEventHandler, useMemo, useRef, useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   CalendarClock,
@@ -59,6 +59,21 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
   const className = completed
     ? "opacity-40 bg-slate-200 dark:bg-slate-800"
     : "bg-white dark:bg-slate-800 cursor-pointer"
+  const longPressTimeout = useRef<ReturnType<typeof setTimeout>>()
+
+  const handleLongPressStart: TouchEventHandler<HTMLLabelElement> = () => {
+    longPressTimeout.current = setTimeout(() => {
+      setOpenDrawer(true)
+    }, 200)
+  }
+
+  const handleLongPressEnd: TouchEventHandler<HTMLLabelElement> = (event) => {
+    if (openDrawer) {
+      event.preventDefault()
+    }
+
+    clearTimeout(longPressTimeout.current)
+  }
 
   const icon = useMemo(() => {
     if (!createdAt) {
@@ -157,10 +172,8 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
             "select-none flex gap-2 items-center rounded-md p-2 border",
             className
           )}
-          onContextMenu={(event) => {
-            event.preventDefault()
-            setOpenDrawer(true)
-          }}
+          onTouchStart={handleLongPressStart}
+          onTouchEnd={handleLongPressEnd}
         >
           <Checkbox
             className="dark:border-slate-600"
