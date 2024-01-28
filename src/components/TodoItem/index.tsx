@@ -211,8 +211,8 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>You sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your todo item.
+                    This action cannot be undone. This will permanently delete "
+                    {text}".
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
