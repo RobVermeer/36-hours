@@ -185,6 +185,10 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
           onTouchStart={handleLongPressStart}
           onTouchMove={handleLongPressMove}
           onTouchEnd={handleLongPressEnd}
+          onContextMenu={(event) => {
+            event.preventDefault()
+            setOpenDrawer(true)
+          }}
         >
           <Checkbox
             className="dark:border-slate-600"
