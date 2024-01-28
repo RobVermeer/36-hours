@@ -60,11 +60,21 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
     ? "opacity-40 bg-slate-200 dark:bg-slate-800"
     : "bg-white dark:bg-slate-800 cursor-pointer"
   const longPressTimeout = useRef<ReturnType<typeof setTimeout>>()
+  const longPressMove = useRef(0)
 
-  const handleLongPressStart: TouchEventHandler<HTMLLabelElement> = () => {
+  const handleLongPressStart: TouchEventHandler<HTMLLabelElement> = (event) => {
+    const longPressStart = event.touches.item(0).clientY
+    longPressMove.current = longPressStart
+
     longPressTimeout.current = setTimeout(() => {
-      setOpenDrawer(true)
-    }, 200)
+      if (Math.abs(longPressStart - longPressMove.current) < 5) {
+        setOpenDrawer(true)
+      }
+    }, 300)
+  }
+
+  const handleLongPressMove: TouchEventHandler<HTMLLabelElement> = (event) => {
+    longPressMove.current = event.touches.item(0).clientY
   }
 
   const handleLongPressEnd: TouchEventHandler<HTMLLabelElement> = (event) => {
@@ -173,6 +183,7 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
             className
           )}
           onTouchStart={handleLongPressStart}
+          onTouchMove={handleLongPressMove}
           onTouchEnd={handleLongPressEnd}
         >
           <Checkbox
