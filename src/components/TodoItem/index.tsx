@@ -58,7 +58,7 @@ export function TodoItem({ id, text, url, completedAt, createdAt }: Props) {
     : 0
   const className = completed
     ? "opacity-40 bg-slate-200 dark:bg-slate-800"
-    : "bg-white dark:bg-slate-800 cursor-pointer	"
+    : "bg-white dark:bg-slate-800 cursor-pointer"
 
   const icon = useMemo(() => {
     if (!createdAt) {
